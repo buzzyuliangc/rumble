@@ -1,0 +1,52 @@
+// Schema for an identity service for a SaaS
+// This service tracks existing users & their accounts, as well as invites for users who haven't joined yet
+
+generator client {
+    provider        = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Offers {
+    id         String    @id @default(uuid())
+    type       Int       @default(0) // 0 = 结婚, 1 = 离婚
+    Aaddress   String
+    Baddress   String?
+    contractId String?
+    Asignature String
+    Bsignature String?
+    Asex       Int?
+    Bsex       Int?
+    Aname      String?
+    Bname      String?
+    status     Int       @default(0) // 0: a签名，1: b签名，2: 已mint -1 : 已撤销
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    AtokenId   String?
+    BtokenId   String?
+    tokenId    String?
+    Acomment   String?
+    Bcomment   String?
+    Acover     String?
+    Bcover     String?
+    cover      String?
+    imageData  String?
+    imageDataB String?
+    bgIndex    Int?
+    blockNo    String?
+    mintedAt   DateTime?
+    burnAuth   Int?     @default(0)
+    nftName    String?
+    expirationDate DateTime?
+}
+
+model Contract {
+    id         String    @id @default(uuid())
+    Caddress   String    
+    Iaddress   String
+    nftName    String
+    burnAuth   Int 
+}
