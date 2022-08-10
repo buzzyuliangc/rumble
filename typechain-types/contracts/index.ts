@@ -7,6 +7,8 @@ import type * as mocks from "./mocks";
 export type { mocks };
 import type * as ownership from "./ownership";
 export type { ownership };
+import type * as solpass from "./solpass";
+export type { solpass };
 import type * as tokens from "./tokens";
 export type { tokens };
 import type * as utils from "./utils";

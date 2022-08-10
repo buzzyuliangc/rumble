@@ -12,17 +12,18 @@ datasource db {
 
 model Offers {
     id         String    @id @default(uuid())
-    type       Int       @default(0) // 0 = 结婚, 1 = 离婚
+    type       Int       @default(0) // 0 = mint, 1 = burn
     Aaddress   String
     Baddress   String?
     contractId String?
+    contractAddr String?
     Asignature String
     Bsignature String?
     Asex       Int?
     Bsex       Int?
     Aname      String?
     Bname      String?
-    status     Int       @default(0) // 0: a签名，1: b签名，2: 已mint -1 : 已撤销
+    status     Int       @default(0) // 0: a signs，1: b signs，2: minted -1 : revoked
     createdAt  DateTime  @default(now())
     updatedAt  DateTime  @updatedAt
     AtokenId   String?

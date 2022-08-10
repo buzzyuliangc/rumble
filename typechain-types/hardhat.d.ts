@@ -45,6 +45,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
+      name: "Solpass",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Solpass__factory>;
+    getContractFactory(
+      name: "ERC42",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC42__factory>;
+    getContractFactory(
       name: "ERC721_520Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC721_520Token__factory>;
@@ -80,6 +88,10 @@ declare module "hardhat/types/runtime" {
       name: "NFToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.NFToken__factory>;
+    getContractFactory(
+      name: "Soul_Token",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Soul_Token__factory>;
     getContractFactory(
       name: "ERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -158,6 +170,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Ownable>;
     getContractAt(
+      name: "Solpass",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Solpass>;
+    getContractAt(
+      name: "ERC42",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC42>;
+    getContractAt(
       name: "ERC721_520Token",
       address: string,
       signer?: ethers.Signer
@@ -202,6 +224,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.NFToken>;
+    getContractAt(
+      name: "Soul_Token",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Soul_Token>;
     getContractAt(
       name: "ERC165",
       address: string,

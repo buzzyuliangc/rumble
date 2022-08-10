@@ -23,6 +23,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from "../../../common";
 
 export interface OwnableInterface extends utils.Interface {
@@ -52,7 +53,7 @@ export interface OwnableInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [string]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
@@ -124,8 +125,8 @@ export interface Ownable extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     transferOwnership(
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      _newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -136,8 +137,8 @@ export interface Ownable extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   transferOwnership(
-    _newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    _newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -148,19 +149,19 @@ export interface Ownable extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     transferOwnership(
-      _newOwner: string,
+      _newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
     "OwnershipTransferred(address,address)"(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
   };
 
@@ -174,8 +175,8 @@ export interface Ownable extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      _newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -189,8 +190,8 @@ export interface Ownable extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      _newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

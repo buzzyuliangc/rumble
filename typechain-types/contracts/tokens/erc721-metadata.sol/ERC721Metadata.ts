@@ -18,6 +18,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from "../../../common";
 
 export interface ERC721MetadataInterface extends utils.Interface {
@@ -35,7 +36,7 @@ export interface ERC721MetadataInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
 
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -77,7 +78,7 @@ export interface ERC721Metadata extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<[string] & { _symbol: string }>;
 
     tokenURI(
-      _tokenId: BigNumberish,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
   };
@@ -86,7 +87,10 @@ export interface ERC721Metadata extends BaseContract {
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
-  tokenURI(_tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  tokenURI(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   callStatic: {
     name(overrides?: CallOverrides): Promise<string>;
@@ -94,7 +98,7 @@ export interface ERC721Metadata extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<string>;
 
     tokenURI(
-      _tokenId: BigNumberish,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
   };
@@ -107,7 +111,7 @@ export interface ERC721Metadata extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenURI(
-      _tokenId: BigNumberish,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -118,7 +122,7 @@ export interface ERC721Metadata extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenURI(
-      _tokenId: BigNumberish,
+      _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

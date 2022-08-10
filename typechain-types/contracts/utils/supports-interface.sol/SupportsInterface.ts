@@ -17,6 +17,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from "../../../common";
 
 export interface SupportsInterfaceInterface extends utils.Interface {
@@ -28,7 +29,7 @@ export interface SupportsInterfaceInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "supportsInterface",
-    values: [BytesLike]
+    values: [PromiseOrValue<BytesLike>]
   ): string;
 
   decodeFunctionResult(
@@ -67,19 +68,19 @@ export interface SupportsInterface extends BaseContract {
 
   functions: {
     supportsInterface(
-      _interfaceID: BytesLike,
+      _interfaceID: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
   };
 
   supportsInterface(
-    _interfaceID: BytesLike,
+    _interfaceID: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   callStatic: {
     supportsInterface(
-      _interfaceID: BytesLike,
+      _interfaceID: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
   };
@@ -88,14 +89,14 @@ export interface SupportsInterface extends BaseContract {
 
   estimateGas: {
     supportsInterface(
-      _interfaceID: BytesLike,
+      _interfaceID: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     supportsInterface(
-      _interfaceID: BytesLike,
+      _interfaceID: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

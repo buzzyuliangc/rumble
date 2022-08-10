@@ -34,7 +34,7 @@ export const FormPage = (props: {}) => {
     hasLoadedBubbles = true;
   };
   useEffect(() => {
-    loadBubbles();
+    //loadBubbles();
   }, []);
 
   return useObserver(() => (
@@ -44,22 +44,12 @@ export const FormPage = (props: {}) => {
         <div className={styles.left}>
           <div className={styles.left_inner} ref={circleDom}></div>
           <div className={styles.circle_text}>
-            <div className={styles.t1}>
-              <Trans id="国库收益(ETH)" />
-            </div>
-            <div className={styles.t2}>{solpassStore.ethBalanceFormated}</div>
-            <div className={styles.t3}>
-              <Trans id="协议已见证了" /> {solpassStore.marryCount}{" "}
-              <Trans id="对新人" />
-            </div>
+
+
             <div className={styles.t4}>
-              <div style={{ marginBottom: "0px", color: "#361041" }}>
-                <Trans id="所有收益都将用于发行Token和空投" />
-              </div>
               <br />
-              <Trans id="Marry3 合约地址：" /> {web3Config.address.marry3}
               <a
-                href={web3Config.scan + web3Config.address.marry3}
+                href={web3Config.scan + solpassStore.pendingOffer.contractAddr}
                 target={"_blank"}
               >
                 <img
@@ -68,7 +58,7 @@ export const FormPage = (props: {}) => {
                 />
               </a>
               <a
-                href={"https://opensea.io/collection/marry3"}
+                href={"https://opensea.io/collection/" + solpassStore.pendingOffer.contractAddr}
                 target={"_blank"}
               >
                 <img
@@ -98,7 +88,7 @@ export const FormPage = (props: {}) => {
                   }}
                 >
                   <LockOutlined style={{ fontSize: "25px" }} /> <br />
-                  <Trans id="连接钱包启动 DAPP" />
+                  Connect Wallet to Activate Rumble
                 </div>
               </div>
             ) : null}

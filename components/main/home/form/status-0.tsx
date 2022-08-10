@@ -288,7 +288,7 @@ export const Status0 = (props: {}) => {
           className="shake-little"
         >
           <LockOutlined style={{ marginRight: "10px" }} />
-          Sign to get invite link
+          sign and deploy Solpass to get invite link
         </Button>
       ) : (
         <Button

@@ -3,6 +3,7 @@
 /* eslint-disable */
 import { Signer, utils, Contract, ContractFactory, Overrides } from "ethers";
 import type { Provider, TransactionRequest } from "@ethersproject/providers";
+import type { PromiseOrValue } from "../../../../common";
 import type {
   AddressUtilsMock,
   AddressUtilsMockInterface,
@@ -31,7 +32,7 @@ const _abi = [
 ];
 
 const _bytecode =
-  "0x608060405234801561001057600080fd5b50610121806100206000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80631627905514602d575b600080fd5b603c603836600460b0565b6050565b604051901515815260200160405180910390f35b6000606f8273ffffffffffffffffffffffffffffffffffffffff166075565b92915050565b6000813f7fc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470811580159060a85750808214155b949350505050565b60006020828403121560c157600080fd5b813573ffffffffffffffffffffffffffffffffffffffff8116811460e457600080fd5b939250505056fea2646970667358221220a6a7d26b82ba4231c48d1b0c9146d34ae4d32b017a40e46ce6f6b80e483dc50864736f6c63430008090033";
+  "0x608060405234801561001057600080fd5b5061012a806100206000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80631627905514602d575b600080fd5b603c603836600460b0565b6050565b6040516047919060e9565b60405180910390f35b6000606f8273ffffffffffffffffffffffffffffffffffffffff166075565b92915050565b6000813f7fc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470811580159060a85750808214155b949350505050565b60006020828403121560c0578081fd5b813573ffffffffffffffffffffffffffffffffffffffff8116811460e2578182fd5b9392505050565b90151581526020019056fea2646970667358221220df5b3a33b084f027c541e14a3513ac18b93f742887b46a9db70683b3dc597ebc64736f6c63430008000033";
 
 type AddressUtilsMockConstructorParams =
   | [signer?: Signer]
@@ -51,12 +52,12 @@ export class AddressUtilsMock__factory extends ContractFactory {
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<AddressUtilsMock> {
     return super.deploy(overrides || {}) as Promise<AddressUtilsMock>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }

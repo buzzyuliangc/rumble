@@ -18,6 +18,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from "../../../common";
 
 export interface ERC721EnumerableInterface extends utils.Interface {
@@ -36,11 +37,11 @@ export interface ERC721EnumerableInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "tokenByIndex",
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenOfOwnerByIndex",
-    values: [string, BigNumberish]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -91,13 +92,13 @@ export interface ERC721Enumerable extends BaseContract {
 
   functions: {
     tokenByIndex(
-      _index: BigNumberish,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     tokenOfOwnerByIndex(
-      _owner: string,
-      _index: BigNumberish,
+      _owner: PromiseOrValue<string>,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -105,13 +106,13 @@ export interface ERC721Enumerable extends BaseContract {
   };
 
   tokenByIndex(
-    _index: BigNumberish,
+    _index: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   tokenOfOwnerByIndex(
-    _owner: string,
-    _index: BigNumberish,
+    _owner: PromiseOrValue<string>,
+    _index: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -119,13 +120,13 @@ export interface ERC721Enumerable extends BaseContract {
 
   callStatic: {
     tokenByIndex(
-      _index: BigNumberish,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     tokenOfOwnerByIndex(
-      _owner: string,
-      _index: BigNumberish,
+      _owner: PromiseOrValue<string>,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -136,13 +137,13 @@ export interface ERC721Enumerable extends BaseContract {
 
   estimateGas: {
     tokenByIndex(
-      _index: BigNumberish,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     tokenOfOwnerByIndex(
-      _owner: string,
-      _index: BigNumberish,
+      _owner: PromiseOrValue<string>,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -151,13 +152,13 @@ export interface ERC721Enumerable extends BaseContract {
 
   populateTransaction: {
     tokenByIndex(
-      _index: BigNumberish,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     tokenOfOwnerByIndex(
-      _owner: string,
-      _index: BigNumberish,
+      _owner: PromiseOrValue<string>,
+      _index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

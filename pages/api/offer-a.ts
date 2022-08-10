@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 import { ethers } from "ethers";
 import { NextApiHandler } from "next";
 import { prisma } from "../../lib/prisma";
-import { verifyMarried } from "../../lib/verify";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "POST") {
@@ -29,8 +28,14 @@ const handler: NextApiHandler = async (req, res) => {
           message: "error signature",
         });
       }
+      const prismaContract = {
+        Caddress: req.body.contractAddr.toLowerCase(),
+        Iaddress: req.body.Aaddress.toLowerCase(),
+        nftName: req.body.nftName,
+        burnAuth: req.body.burnAuth,
+      }
 
-      const data = {
+      const prismaOffers = {
         Aaddress: req.body.Aaddress.toLowerCase(),
         Aname: req.body.Aname,
         Asignature: req.body.signature,
@@ -40,53 +45,67 @@ const handler: NextApiHandler = async (req, res) => {
         burnAuth: req.body.burnAuth,
         nftName: req.body.nftName,
         expirationDate: req.body.expirationDate,
+        contractId: "",
       };
-      if (!data.cover) {
+      if (!prismaOffers.cover) {
         return res.status(400).json({
           message: "cover picture empty",
         });
       }
-      if (!data.Aname) {
+      if (!prismaOffers.Aname) {
         return res.status(400).json({
           message: "name empty",
         });
       }
-      if (data.burnAuth === undefined || data.burnAuth === null || data.burnAuth < 0 || data.burnAuth > 3) {
+      if (prismaOffers.burnAuth === undefined || prismaOffers.burnAuth === null || prismaOffers.burnAuth < 0 || prismaOffers.burnAuth > 3) {
         return res.status(400).json({
           message: "invalid burnauth",
         });
       }
-      if (!data.nftName) {
+      if (!prismaOffers.nftName) {
         return res.status(400).json({
           message: "nftName empty",
         });
       }
+      if (!prismaContract.Caddress) {
+        return res.status(400).json({
+          message: "contract address empty",
+        });
+      }
 
-      console.log(req.body);
-      console.log('data', data);
 
-      // one offer one day
-      /*const result = await prisma.offers.findFirst({
+      console.log('offers', prismaOffers);
+      console.log('Contact', prismaContract);
+
+      const duplicate = await prisma.contract.findFirst({
         where: {
-          Aaddress: data.Aaddress,
-          status: {
-            not: -1,
-          },
-          type: 0,
+          Caddress: prismaContract.Caddress,
         },
         orderBy: {
-          createdAt: "desc",
+          id: "desc",
         },
       });
-      console.log("result", result);
-      if (result) {
+      console.log("duplicate", duplicate);
+      if (duplicate) {
         return res.status(400).json({
-          message: "you have not finished offer",
+          message: "contract address already saved",
         });
-      }*/
-      // create offer
+      };
+
+      const contract = await prisma.contract.create({
+        data: prismaContract,
+      });
+      console.log('contract', contract);
+      if (!contract) {
+        res.status(400).send({
+          message: "database error",
+        });
+        return;
+      }
+      prismaOffers.contractId = contract.id;
+
       const offer = await prisma.offers.create({
-        data: data,
+        data: prismaOffers,
       });
       console.log('offer', offer);
       if (offer) {

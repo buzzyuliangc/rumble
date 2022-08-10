@@ -2,6 +2,7 @@ import { message, Modal } from "antd";
 import { BigNumber, utils } from "ethers";
 import { action, computed, makeAutoObservable } from "mobx";
 import { Marry3Contract } from "../../contracts";
+import { deploySolpass } from "../../contracts";
 import wallet from "../../contracts/wallet";
 import { web3Config } from "../config";
 import { IStore, StoreType } from "../store.interface";
@@ -18,6 +19,7 @@ export type Offers = {
     Aaddress?: string;
     Baddress?: string;
     contractId?: string;
+    contractAddr?: string;
     Asignature?: string;
     Bsignature?: string | null;
     Aname?: string | null;
@@ -51,6 +53,8 @@ export class SolpassStore implements IStore {
     };
 
     pendingOffer: Offers = {};
+
+    allPendingOffers: Offers[] = [];
 
     proof: string[] = [];
 
@@ -93,6 +97,7 @@ export class SolpassStore implements IStore {
     async signA() {
         //generates random uuid
         const uuid = uuidv4();
+        const baseURI = "https://ipfs.infura.io/ipfs/";
 
         const body = {
             nonce: uuid,
@@ -104,9 +109,14 @@ export class SolpassStore implements IStore {
             burnAuth: this.info.burnAuth,
             nftName: this.info.nftName,
             expirationDate: this.info.expirationDate,
+            contractAddr: "",
         };
         if (!body.cover) {
             message.error("solpass cover empty");
+            return;
+        }
+        if (body.burnAuth != 0 && body.burnAuth != 1 && body.burnAuth != 2 && body.burnAuth != 3) {
+            message.error("invalid burnAuth");
             return;
         }
         if (!body.Aname) {
@@ -120,6 +130,10 @@ export class SolpassStore implements IStore {
             message.error("solpass description empty");
             return;
         }
+        if (!body.Aaddress) {
+            message.error("Wallet unconnected");
+            return;
+        }
         if (body.Aname?.indexOf(".eth") != -1) {
             const ens = await walletStore.getENS(this.info.Aaddress);
             if (body.Aname?.toLowerCase() != ens?.toLowerCase()) {
@@ -130,7 +144,17 @@ export class SolpassStore implements IStore {
             }
         }
         const msg = await walletStore.signMessage(uuid);
+        const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
+        if (!result) {
+            message.error('Deployment failed, please make sure your wallet is connected and try again');
+            return;
+        }
+        if (!result.address) {
+            message.error("Deployment failed, please make sure your wallet is connected and try again");
+            return;
+        }
         body.signature = msg;
+        body.contractAddr = result.address;
         const offer = await fetch("/api/offer-a", {
             method: "POST",
             headers: {
@@ -141,6 +165,7 @@ export class SolpassStore implements IStore {
         const res = await offer.json();
         if (res.id) {
             this.pendingOffer = res;
+            this.pendingOffer.contractAddr = this.info.contractAddr;
             this.info.status = 1;
             this.info.inviteLink = "/offer/" + res.id;
             this.getOffer();
@@ -316,6 +341,7 @@ export class SolpassStore implements IStore {
             const json = await result.json();
             if (!json.message) {
                 //for now only considering first offer
+                this.allPendingOffers = json;
                 this.pendingOffer = json[0];
             }
         } catch (e) { }

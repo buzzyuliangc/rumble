@@ -16,6 +16,7 @@ import wallet from "../../../../contracts/wallet";
 import styles from "./../../../../pages/home/home.module.less";
 import useStore from "../../../../stores/useStore";
 import { MarryStore } from "../../../../stores/main/marry.store";
+import { SolpassStore } from "../../../../stores/main/solpass.store";
 import { NFTStore } from "../../../../stores/main/nfts.store";
 import { useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
@@ -25,13 +26,12 @@ import { WalletStore } from "../../../../stores/main/wallet.store";
 import { v4 as uuidv4 } from "uuid";
 import { utils } from "ethers";
 import QRCode from "qrcode";
-import { Marry3Contract } from "../../../../contracts";
 
 export const StatusPending = (props: {}) => {
   const formItemLayout = {
     wrapperCol: { span: 24 },
   };
-  const marryStore = useStore(MarryStore);
+  const solpassStore = useStore(SolpassStore);
   const walletStore = useStore(WalletStore);
   const [minting, setMinting] = useState(false);
 
@@ -93,8 +93,8 @@ export const StatusPending = (props: {}) => {
     const image = new Image();
     image.width = 1080;
     image.height = 1080;
-    image.src = marryStore.pendingOffer?.bgIndex
-      ? `/bg/${marryStore.pendingOffer.bgIndex}.png`
+    image.src = solpassStore.pendingOffer?.bgIndex
+      ? `/bg/${solpassStore.pendingOffer.bgIndex}.png`
       : `/bg/1.png`;
 
     const image_r: any = await imageLoaded(image);
@@ -109,16 +109,6 @@ export const StatusPending = (props: {}) => {
     context.drawImage(svgImage_r, 0, 0, size, size);
     context.drawImage(upcanvas, 90, 90, 250, 250);
     context.drawImage(downcanvas, 90, 340, 250, 250);
-    // context.drawImage(upcanvas, 90, 90, 250, 250);
-    // context.drawImage(downcanvas, 90, 340, 250, 250);
-    // // const logo_r: any = await imageLoaded(logo);
-    // context.drawImage(
-    //   logo_r,
-    //   size - 70 - 160 * 1.5,
-    //   size - 90 - 40 * 1.5,
-    //   160 * 1.5,
-    //   47 * 1.5
-    // );
     if (tokenId) {
       let canvasQR = document.createElement("canvas");
 
@@ -166,17 +156,17 @@ export const StatusPending = (props: {}) => {
     let dataUrl, dataUrl2;
     setDownloading(true);
     try {
-      dataUrl = await createImage(svgref, marryStore.pendingOffer.AtokenId);
-      dataUrl2 = await createImage(svgref2, marryStore.pendingOffer.BtokenId);
+      dataUrl = await createImage(svgref, solpassStore.pendingOffer.tokenId);
+      dataUrl2 = await createImage(svgref2, solpassStore.pendingOffer.tokenId);
       var a = document.createElement("a");
       a.href = dataUrl;
-      a.download = `Marry3 Certificate #${marryStore.pendingOffer.AtokenId}.png`;
+      a.download = `Marry3 Certificate #${solpassStore.pendingOffer.tokenId}.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       var a = document.createElement("a");
       a.href = dataUrl2;
-      a.download = `Marry3 Certificate #${marryStore.pendingOffer.BtokenId}.png`;
+      a.download = `Marry3 Certificate #${solpassStore.pendingOffer.tokenId}.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -197,7 +187,7 @@ export const StatusPending = (props: {}) => {
       const body = {
         nonce: uuid,
         signature: msg,
-        id: marryStore.pendingOffer.id,
+        id: solpassStore.pendingOffer.id,
         imageData: dataUrl,
         imageData2: dataUrl2,
       };
@@ -223,14 +213,14 @@ export const StatusPending = (props: {}) => {
           console.log("Bsignature", res);
           const loading = message.loading("please wait until success...", 0);
           try {
-            const blockNo = await marryStore.mint(
+            /*const blockNo = await marryStore.mint(
               res.Aaddress,
               res.Baddress,
               res.Asex,
               res.Bsex,
               Bsignature
-            );
-            try {
+            );*/
+            /*try {
               const pairedInfo = await Marry3Contract().getPairInfo(
                 res.Aaddress
               );
@@ -253,9 +243,9 @@ export const StatusPending = (props: {}) => {
                   )
                 );
               }
-            } catch (e) { }
+            } catch (e) { }*/
 
-            await marryStore.getOffer();
+            await solpassStore.getOffer();
           } catch (e) {
             console.error(e);
             message.error("mint error");
@@ -283,7 +273,7 @@ export const StatusPending = (props: {}) => {
         });
         clip.on("success", function () {
           message.success("copy success");
-          marryStore.shareClicked = true;
+          solpassStore.shareClicked = true;
         });
         clip.on("error", () => {
           message.error("copy fail");
@@ -306,7 +296,7 @@ export const StatusPending = (props: {}) => {
             nftActiveIndex == 0 ? styles.nft_active : "",
           ].join(" ")}
         >
-          <NFT offer={marryStore.pendingOffer} width={340} isA={true} />
+          <NFT offer={solpassStore.pendingOffer} width={340} isA={true} />
         </div>
         <div
           style={{
@@ -319,7 +309,7 @@ export const StatusPending = (props: {}) => {
           ].join(" ")}
           ref={svgref2}
         >
-          <NFT offer={marryStore.pendingOffer} width={340} isA={false} />
+          <NFT offer={solpassStore.pendingOffer} width={340} isA={false} />
         </div>
         <div className={styles.control}>
           <div
@@ -339,16 +329,16 @@ export const StatusPending = (props: {}) => {
         </div>
       </div>
 
-      {marryStore.pendingOffer.status == 0 ? (
+      {solpassStore.pendingOffer.status == 0 ? (
         <Button
-          disabled={marryStore.pendingOffer.status == 0}
+          disabled={solpassStore.pendingOffer.status == 0}
           type="primary"
-          loading={marryStore.pendingOffer.status == 0}
+          loading={solpassStore.pendingOffer.status == 0}
           style={{ width: "100%" }}
         >
           <Trans id=" 等待接受" />
         </Button>
-      ) : marryStore.pendingOffer.status == 2 ? (
+      ) : solpassStore.pendingOffer.status == 2 ? (
         <>
           <Button
             style={{ width: "calc(100% - 70px)" }}
@@ -374,7 +364,7 @@ export const StatusPending = (props: {}) => {
               "https://twitter.com/intent/tweet?text=" +
               encodeURIComponent(
                 "I just marry in web3 with my lover, and mint Paired Soubound Marry3 Certificate, https://marry3.love/i/" +
-                marryStore.pendingOffer.AtokenId +
+                solpassStore.pendingOffer.tokenId +
                 " @marryinweb3 #marry3"
               )
             }
@@ -404,10 +394,10 @@ export const StatusPending = (props: {}) => {
             loading={minting}
           >
             <Trans id="Mint " />(
-            {marryStore.marryPrice &&
-              Number(utils.formatEther(marryStore.marryPrice)) == 0
+            {solpassStore.mintPrice &&
+              Number(utils.formatEther(solpassStore.mintPrice)) == 0
               ? "Free"
-              : marryStore.marryPriceFormated + " Ξ"}
+              : solpassStore.mintPriceFormated + " Ξ"}
             )
           </Button>
           <Button
@@ -417,7 +407,7 @@ export const StatusPending = (props: {}) => {
                 0
               );
               try {
-                await marryStore.revoke();
+                await solpassStore.revoke();
                 window.location.reload();
               } catch (e) {
                 console.error(e);
@@ -432,7 +422,7 @@ export const StatusPending = (props: {}) => {
         </>
       )}
 
-      {marryStore.pendingOffer.status == 0 ? (
+      {solpassStore.pendingOffer.status == 0 ? (
         <Input.Group
           compact
           style={{
@@ -443,7 +433,7 @@ export const StatusPending = (props: {}) => {
         >
           <input
             value={
-              window.location.origin + `/offer/${marryStore.pendingOffer.id}`
+              window.location.origin + `/offer/${solpassStore.pendingOffer.id}`
             }
             style={{
               width: "calc(100% - 160px)",
@@ -481,7 +471,7 @@ export const StatusPending = (props: {}) => {
               encodeURIComponent(
                 "I just make an offer in marry3.love, anyone want to marry with me? we will get two Soubound Marry3 Certificate NFT, and witness by code. " +
                 window.location.origin +
-                `/offer/${marryStore.pendingOffer.id}` +
+                `/offer/${solpassStore.pendingOffer.id}` +
                 " @marryinweb3 #marry3"
               )
             }

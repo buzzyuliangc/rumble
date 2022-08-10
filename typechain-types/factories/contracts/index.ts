@@ -4,5 +4,6 @@
 export * as marry3 from "./marry3";
 export * as mocks from "./mocks";
 export * as ownership from "./ownership";
+export * as solpass from "./solpass";
 export * as tokens from "./tokens";
 export * as utils from "./utils";

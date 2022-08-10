@@ -46,7 +46,7 @@ export const FormDesc = (props: {}) => {
               Token #{solpassStore.pendingOffer.tokenId}
             </a>
             <a
-              href={`${web3Config.opensea}${web3Config.address.marry3}/${solpassStore.pendingOffer.tokenId}`}
+              href={`${web3Config.opensea}${solpassStore.pendingOffer.contractAddr}/${solpassStore.pendingOffer.tokenId}`}
               target={"_blank"}
               style={{ fontWeight: "500", marginLeft: "10px" }}
             >
@@ -61,69 +61,15 @@ export const FormDesc = (props: {}) => {
             </a>
           </div>
           <div className={styles.join_holder}>
-            Join the Holder Discord:{" "}
-            <a href="https://discord.gg/eAN9TaAaSq" target={"_blank"}>
-              https://discord.gg/eAN9TaAaSq
+            Join the Rumble Discord:{" "}
+            <a href="https://discord.gg/" target={"_blank"}>
+              https://discord.gg/
             </a>
           </div>
         </>
       ) : (
         <div className={styles.price_desc}>
-          <Tooltip
-            title={
-              <table>
-                <tr>
-                  <th style={{ width: "100px" }}>
-                    <Trans id="总数" />
-                  </th>
-                  <th>
-                    <Trans id="价格(ETH)" />
-                  </th>
-                </tr>
-                <tr>
-                  <td>0~99</td>
-                  <td>0.01</td>
-                </tr>{" "}
-                <tr>
-                  <td>100~299</td>
-                  <td>0.015</td>
-                </tr>{" "}
-                <tr>
-                  <td>300~599</td>
-                  <td>0.02</td>{" "}
-                </tr>{" "}
-                <tr>
-                  <td>600~999</td>
-                  <td>0.025</td>
-                </tr>{" "}
-                <tr>
-                  <td>1000~1499</td>
-                  <td>0.03</td>
-                </tr>{" "}
-                <tr>
-                  <td>1500~2009</td>
-                  <td>0.035</td>
-                </tr>{" "}
-                <tr>
-                  <td>2100~1799</td>
-                  <td>0.04</td>
-                </tr>{" "}
-                <tr>
-                  <td>2800~3599</td>
-                  <td>0.045</td>
-                </tr>{" "}
-                <tr>
-                  <td>3600+</td>
-                  <td>0.05</td>
-                </tr>
-              </table>
-            }
-          >
-            <span>
-              <Trans id="初始Mint价格仅0.01Ξ，但价格还是会随着参与人数的增加有所上涨，最终会恒定在0.05Ξ，具体的算法规则" />{" "}
-              <QuestionCircleOutlined style={{ display: "inline" }} />
-            </span>
-          </Tooltip>
+
         </div>
       )}
     </>

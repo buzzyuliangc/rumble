@@ -22,6 +22,10 @@ export type { NFTokenMock } from "./contracts/mocks/nf-token-mock.sol/NFTokenMoc
 export { NFTokenMock__factory } from "./factories/contracts/mocks/nf-token-mock.sol/NFTokenMock__factory";
 export type { Ownable } from "./contracts/ownership/ownable.sol/Ownable";
 export { Ownable__factory } from "./factories/contracts/ownership/ownable.sol/Ownable__factory";
+export type { Solpass } from "./contracts/solpass/solpass.sol/Solpass";
+export { Solpass__factory } from "./factories/contracts/solpass/solpass.sol/Solpass__factory";
+export type { ERC42 } from "./contracts/tokens/erc42.sol/ERC42";
+export { ERC42__factory } from "./factories/contracts/tokens/erc42.sol/ERC42__factory";
 export type { ERC721_520Token } from "./contracts/tokens/erc721_520-token.sol/ERC721_520Token";
 export { ERC721_520Token__factory } from "./factories/contracts/tokens/erc721_520-token.sol/ERC721_520Token__factory";
 export type { ERC721_520 } from "./contracts/tokens/erc721_520.sol/ERC721_520";
@@ -40,6 +44,8 @@ export type { NFTokenMetadata } from "./contracts/tokens/nf-token-metadata.sol/N
 export { NFTokenMetadata__factory } from "./factories/contracts/tokens/nf-token-metadata.sol/NFTokenMetadata__factory";
 export type { NFToken } from "./contracts/tokens/nf-token.sol/NFToken";
 export { NFToken__factory } from "./factories/contracts/tokens/nf-token.sol/NFToken__factory";
+export type { Soul_Token } from "./contracts/tokens/soul-token.sol/Soul_Token";
+export { Soul_Token__factory } from "./factories/contracts/tokens/soul-token.sol/Soul_Token__factory";
 export type { ERC165 } from "./contracts/utils/erc165.sol/ERC165";
 export { ERC165__factory } from "./factories/contracts/utils/erc165.sol/ERC165__factory";
 export type { SupportsInterface } from "./contracts/utils/supports-interface.sol/SupportsInterface";

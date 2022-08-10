@@ -17,6 +17,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
+  PromiseOrValue,
 } from "../../../common";
 
 export interface AddressUtilsMockInterface extends utils.Interface {
@@ -26,7 +27,10 @@ export interface AddressUtilsMockInterface extends utils.Interface {
 
   getFunction(nameOrSignatureOrTopic: "isContract"): FunctionFragment;
 
-  encodeFunctionData(functionFragment: "isContract", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "isContract",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "isContract", data: BytesLike): Result;
 
@@ -61,26 +65,35 @@ export interface AddressUtilsMock extends BaseContract {
 
   functions: {
     isContract(
-      _addr: string,
+      _addr: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { addressCheck: boolean }>;
   };
 
-  isContract(_addr: string, overrides?: CallOverrides): Promise<boolean>;
+  isContract(
+    _addr: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   callStatic: {
-    isContract(_addr: string, overrides?: CallOverrides): Promise<boolean>;
+    isContract(
+      _addr: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
   };
 
   filters: {};
 
   estimateGas: {
-    isContract(_addr: string, overrides?: CallOverrides): Promise<BigNumber>;
+    isContract(
+      _addr: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     isContract(
-      _addr: string,
+      _addr: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
