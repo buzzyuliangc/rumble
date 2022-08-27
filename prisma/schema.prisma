@@ -55,7 +55,7 @@ model Contract {
 model Token {
     id        String   @id @default(uuid())
     offersId  String   
-    tokenId?  String
+    tokenId   String?
     Iaddress  String
     Raddress  String
     Caddress  String
