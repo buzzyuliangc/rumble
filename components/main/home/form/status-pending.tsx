@@ -34,6 +34,8 @@ export const StatusPending = (props: {}) => {
   const solpassStore = useStore(SolpassStore);
   const walletStore = useStore(WalletStore);
   const [minting, setMinting] = useState(false);
+  const [nftActiveIndex, setNftActiveIndex] = useState(solpassStore.pendingOfferIndex ? solpassStore.pendingOfferIndex : 0);
+  console.log("all offers", solpassStore.allPendingOffers);
 
   const svgref = useRef(null);
   const svgref2 = useRef(null);
@@ -42,8 +44,7 @@ export const StatusPending = (props: {}) => {
 
   const createImage = async (svgRef: any, tokenId?: string) => {
     console.log(svgRef.current.getElementsByTagName("div")[0]);
-    const image1 = svgRef.current.getElementsByClassName("cover_1")[0];
-    const image2 = svgRef.current.getElementsByClassName("cover_2")[0];
+    const image1 = svgRef.current.getElementsByClassName("cover")[0];
     const logo = svgRef.current.getElementsByClassName("logo")[0];
 
     const imageCompUp = new Image();
@@ -70,11 +71,11 @@ export const StatusPending = (props: {}) => {
     upcanvas.getContext("2d").globalCompositeOperation = "destination-in";
     upcanvas.getContext("2d").drawImage(imageCompUp_r, 0, 0, 250, 250);
 
-    const image2_r: any = await imageLoaded(image2);
+    /*const image2_r: any = await imageLoaded(image2);
     const imageCompDown_r: any = await imageLoaded(imageCompDown);
     downcanvas.getContext("2d").drawImage(image2_r, 0, 0, 250, 250);
     downcanvas.getContext("2d").globalCompositeOperation = "destination-in";
-    downcanvas.getContext("2d").drawImage(imageCompDown_r, 0, 0, 250, 250);
+    downcanvas.getContext("2d").drawImage(imageCompDown_r, 0, 0, 250, 250);*/
 
     const svg = svgRef.current.getElementsByTagName("svg")[0];
     if (!svg) return;
@@ -281,7 +282,12 @@ export const StatusPending = (props: {}) => {
       }
     }
   }, [copyRef.current]);
-  const [nftActiveIndex, setNftActiveIndex] = useState(0);
+  useEffect(() => {
+    setNftActiveIndex(solpassStore.pendingOfferIndex);
+    if (solpassStore.allPendingOffers[nftActiveIndex]) {
+      solpassStore.pendingOffer = solpassStore.allPendingOffers[solpassStore.pendingOfferIndex];
+    }
+  }, [solpassStore.pendingOfferIndex])
   return useObserver(() => (
     <Form {...formItemLayout} layout={"vertical"} className={styles.mainForm}>
       <div className={styles.nfts}>
@@ -296,36 +302,7 @@ export const StatusPending = (props: {}) => {
             nftActiveIndex == 0 ? styles.nft_active : "",
           ].join(" ")}
         >
-          <NFT offer={solpassStore.pendingOffer} width={340} isA={true} />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-          className={[
-            styles.nft,
-            nftActiveIndex == 1 ? styles.nft_active : "",
-          ].join(" ")}
-          ref={svgref2}
-        >
-          <NFT offer={solpassStore.pendingOffer} width={340} isA={false} />
-        </div>
-        <div className={styles.control}>
-          <div
-            className={[
-              styles.control_item,
-              nftActiveIndex == 0 ? styles.control_item_active : "",
-            ].join(" ")}
-            onClick={() => setNftActiveIndex(0)}
-          ></div>
-          <div
-            className={[
-              styles.control_item,
-              nftActiveIndex == 1 ? styles.control_item_active : "",
-            ].join(" ")}
-            onClick={() => setNftActiveIndex(1)}
-          ></div>
+          <NFT offers={solpassStore.allPendingOffers} width={340} index={nftActiveIndex} />
         </div>
       </div>
 
@@ -336,7 +313,7 @@ export const StatusPending = (props: {}) => {
           loading={solpassStore.pendingOffer.status == 0}
           style={{ width: "100%" }}
         >
-          <Trans id=" 等待接受" />
+          Waiting for Receiver Signature
         </Button>
       ) : solpassStore.pendingOffer.status == 2 ? (
         <>
@@ -451,7 +428,7 @@ export const StatusPending = (props: {}) => {
             data-clipboard-target="#copy-input"
             ref={copyRef}
           >
-            {t`复制并分享`}
+            Copy Link
           </Button>
           <a
             style={{
@@ -469,10 +446,10 @@ export const StatusPending = (props: {}) => {
             href={
               "https://twitter.com/intent/tweet?text=" +
               encodeURIComponent(
-                "I just make an offer in marry3.love, anyone want to marry with me? we will get two Soubound Marry3 Certificate NFT, and witness by code. " +
+                "I just created a Solpass collection, click link to mint a pass" +
                 window.location.origin +
                 `/offer/${solpassStore.pendingOffer.id}` +
-                " @marryinweb3 #marry3"
+                " @rumble #rumble"
               )
             }
             target={"_blank"}
@@ -482,7 +459,7 @@ export const StatusPending = (props: {}) => {
               content={
                 <div style={{ width: "180px" }}>
                   share to twitter
-                  <br /> we will help you found your lover
+                  <br /> invite friends to mint
                 </div>
               }
               visible={true}

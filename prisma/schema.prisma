@@ -51,3 +51,14 @@ model Contract {
     nftName    String
     burnAuth   Int 
 }
+
+model Token {
+    id        String   @id @default(uuid())
+    offersId  String   
+    tokenId?  String
+    Iaddress  String
+    Raddress  String
+    Caddress  String
+    createdAt DateTime @default(now())
+    minted    Boolean
+}

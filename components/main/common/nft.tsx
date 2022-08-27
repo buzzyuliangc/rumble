@@ -2,32 +2,35 @@ import html2canvas from "html2canvas";
 import { useObserver } from "mobx-react";
 import moment from "moment";
 import React, { useEffect, useRef } from "react";
-import { Offers } from "../../../stores/main/marry.store";
+//import { Offers } from "../../../stores/main/marry.store";
+import { Offers } from "../../../stores/main/solpass.store";
 import styles from "./footer.module.less";
+import { Image, Upload, Typography } from 'antd';
+import { HeartFilled, PicCenterOutlined } from "@ant-design/icons";
+import { content } from "html2canvas/dist/types/css/property-descriptors/content";
+
+const { Title, Paragraph, Text, Link } = Typography;
 
 export const NFT = (props: {
-  offer?: Offers;
+  offers?: Offers[];
   width?: number;
-  isA?: boolean;
+  index?: number;
 }) => {
   const svgref = useRef(null);
 
-  const bgImage = props.offer?.bgIndex
-    ? `url(${window.location.origin}/bg/${props.offer.bgIndex}.png)`
+  const bgImage = props.offers?.at(props.index).bgIndex
+    ? `url(${window.location.origin}/bg/${props.offers?.at(props.index).bgIndex}.png)`
     : `url(${window.location.origin}/bg/1.png)`;
 
-  const coverA = props.offer?.Acover
-    ? props.offer?.Acover // `/api/proxy?url=${encodeURIComponent(props.offer?.Acover)}`
+  const coverA = props.offers?.at(props.index).cover
+    ? `https://rumble.infura-ipfs.io/ipfs/${props.offers?.at(props.index).cover}` // `/api/proxy?url=${encodeURIComponent(props.offer?.Acover)}`
     : "/heart-cover.png";
 
-  const coverB = props.offer?.Bcover
-    ? props.offer?.Bcover //`/api/proxy?url=${encodeURIComponent(props.offer?.Bcover)}`
-    : "/heart-cover.png";
   useEffect(() => {
     const css = document.createElement("style");
     css.innerHTML = `
     :root{
-      --bg: ${bgImage}
+    --bg: ${bgImage}
     }
   `;
     document.body.appendChild(css);
@@ -44,53 +47,72 @@ export const NFT = (props: {
         height: props.width + "px",
       }}
     >
-      <img
-        className="cover_1"
+
+      <div
+        className="cover-whatever"
         style={{
           background: "#fff",
-          width: (250 * 100) / 1080 + "%",
-          height: (250 * 100) / 1080 + "%",
+          width: (500 * 100) / 1080 + "%",
+          height: (500 * 100) / 1080 + "%",
           left: (90 * 100) / 1080 + "%",
           top: (90 * 100) / 1080 + "%",
           position: "absolute",
-          borderTopLeftRadius: "50%",
-          borderTopRightRadius: "50%",
           zIndex: 20,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: "6px",
+          border: "10px dashed 4px #ff0000",
+          overflow: "hidden",
         }}
-        crossOrigin="anonymous"
-        src={props.isA ? coverA : coverB}
-      />
-      <img
-        className="cover_2"
+      >
+        <img
+          className="cover-yeh"
+          style={{
+            background: "#fff",
+            width: "100%",
+          }}
+          crossOrigin="anonymous"
+          src={coverA}
+        />
+      </div>
+      {/*<Upload
+        name="cover-buzz"
+        listType="picture-card"
+        className="cover-buzz "
+        showUploadList={false}
+        disabled={true}
         style={{
           background: "#fff",
           width: (250 * 100) / 1080 + "%",
           height: (250 * 100) / 1080 + "%",
-          left: (90 * 100) / 1080 + "%",
-          top: (340 * 100) / 1080 + "%",
+          left: (600 * 100) / 1080 + "%",
+          top: (640 * 100) / 1080 + "%",
           position: "absolute",
-          borderBottomLeftRadius: "50%",
-          borderBottomRightRadius: "50%",
           zIndex: 20,
         }}
-        crossOrigin="anonymous"
-        src={props.isA ? coverB : coverA}
-      />
-
-      {props.offer?.status == 0 ? (
-        <img
-          className="gift"
+      >
+        <img src={coverA}
+          alt="avatar"
           style={{
-            width: "100%",
-            height: "100%",
-            right: 0,
-            bottom: 0,
-            position: "absolute",
-            zIndex: 100,
+            width: '100%',
           }}
-          src={"/form/gift.png"}
         />
-      ) : null}
+        </Upload>*/}
+
+      {/*<img
+        className="cover"
+        style={{
+          width: "30%",
+          height: "30%",
+          "objectFit": "cover",
+          right: 0,
+          bottom: 0,
+          position: "absolute",
+          zIndex: 100,
+        }}
+        src={coverA}
+      />*/}
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -361,7 +383,7 @@ export const NFT = (props: {
                           opacity="1"
                           letterSpacing="0"
                         >
-                          Protocol
+                          BurnAuth
                         </tspan>
                       </text>
                     </g>
@@ -398,7 +420,7 @@ export const NFT = (props: {
                           opacity="1"
                           letterSpacing="0"
                         >
-                          ERC721-520
+                          {props.offers?.at(props.index).burnAuth}
                         </tspan>
                       </text>
                     </g>
@@ -417,7 +439,7 @@ export const NFT = (props: {
                           opacity="1"
                           letterSpacing="0"
                         >
-                          Datetime
+                          Expiration
                         </tspan>
                       </text>
                     </g>
@@ -454,15 +476,15 @@ export const NFT = (props: {
                           opacity="1"
                           letterSpacing="0"
                         >
-                          {props.offer?.mintedAt
-                            ? moment(props.offer?.mintedAt).format("YYYY-MM-DD")
-                            : moment().format("YYYY-MM-DD")}
+                          {props.offers?.at(props.index).expirationDate
+                            ? moment(props.offers?.at(props.index).expirationDate).format("YYYY-MM-DD")
+                            : "  --  "}
                         </tspan>
                       </text>
                     </g>
                   </g>
                 </g>
-                {props.offer.AtokenId ? (
+                {props.offers?.at(props.index).tokenId ? (
                   <g opacity="1" transform="translate(0 120)  rotate(0 113 16)">
                     <g opacity="1" transform="translate(0 0)  rotate(0 113 16)">
                       <g
@@ -517,9 +539,7 @@ export const NFT = (props: {
                             letterSpacing="0"
                           >
                             #
-                            {props.isA
-                              ? props.offer.AtokenId
-                              : props.offer.BtokenId}
+                            {props.offers?.at(props.index).tokenId}
                           </tspan>
                         </text>
                       </g>
@@ -531,15 +551,17 @@ export const NFT = (props: {
                 <g opacity="1" transform="translate(410 172)  rotate(0 297 53)">
                   <text>
                     <tspan
-                      x="0"
+                      x="10"
                       y="80"
-                      fontSize="80"
+                      fontSize="70"
                       line-height="0"
                       fill="#361041"
                       opacity="1"
                       letterSpacing="0"
                     >
-                      {props.isA ? props.offer?.Aname : props.offer?.Bname}
+
+                      {props.offers?.at(props.index).nftName}
+
                     </tspan>
                   </text>
                 </g>
@@ -552,13 +574,13 @@ export const NFT = (props: {
                   <tspan
                     x="0"
                     y="96"
-                    fontSize="96"
+                    fontSize="30"
                     line-height="0"
                     fill="#DDDDDD"
                     opacity="1"
                     letterSpacing="0"
                   >
-                    &amp;
+                    Issued by {props.offers?.at(props.index).Aname}
                   </tspan>
                 </text>
               </g>
@@ -568,13 +590,13 @@ export const NFT = (props: {
                     <tspan
                       x="0"
                       y="80"
-                      fontSize="80"
+                      fontSize="30"
                       line-height="0"
                       fill="#361041"
                       opacity="1"
                       letterSpacing="0"
                     >
-                      {props.isA ? props.offer?.Bname : props.offer?.Aname}
+                      Description: {props.offers?.at(props.index).Acomment}
                     </tspan>
                   </text>
                 </g>
@@ -611,9 +633,7 @@ export const NFT = (props: {
                   fontFamily="Inter-SemiBold"
                   letterSpacing="9.84"
                 >
-                  {props.isA
-                    ? props.offer?.Aaddress?.toUpperCase()
-                    : props.offer?.Baddress?.toUpperCase()}
+                  {props.offers?.at(props.index).Aaddress?.toUpperCase()}
                 </tspan>
               </text>
             </g>
@@ -632,9 +652,7 @@ export const NFT = (props: {
                   fontFamily="Inter-SemiBold"
                   letterSpacing="9.84"
                 >
-                  {props.isA
-                    ? props.offer?.Baddress?.toUpperCase()
-                    : props.offer?.Aaddress?.toUpperCase()}
+                  {props.offers?.at(props.index).Baddress?.toUpperCase()}
                 </tspan>
               </text>
             </g>
@@ -653,9 +671,7 @@ export const NFT = (props: {
                   fontFamily="Inter-SemiBold"
                   letterSpacing="9.84"
                 >
-                  {props.isA
-                    ? props.offer?.Baddress?.toUpperCase()
-                    : props.offer?.Aaddress?.toUpperCase()}
+                  {props.offers?.at(props.index).Baddress?.toUpperCase()}
                 </tspan>
               </text>
             </g>
@@ -671,9 +687,7 @@ export const NFT = (props: {
                   fontFamily="Inter-SemiBold"
                   letterSpacing="9.84"
                 >
-                  {props.isA
-                    ? props.offer?.Aaddress?.toUpperCase()
-                    : props.offer?.Baddress?.toUpperCase()}
+                  {props.offers?.at(props.index).Aaddress?.toUpperCase()}
                 </tspan>
               </text>
             </g>

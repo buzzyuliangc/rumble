@@ -28,6 +28,13 @@ const handler: NextApiHandler = async (req, res) => {
           message: "error signature",
         });
       }
+      const existingContract = await prisma.contract.findFirst({
+        where: {
+          Caddress: req.body.contractAddr.toLowerCase(),
+        }
+      });
+
+
       const prismaContract = {
         Caddress: req.body.contractAddr.toLowerCase(),
         Iaddress: req.body.Aaddress.toLowerCase(),
@@ -46,6 +53,7 @@ const handler: NextApiHandler = async (req, res) => {
         nftName: req.body.nftName,
         expirationDate: req.body.expirationDate,
         contractId: "",
+        contractAddr: req.body.contractAddr.toLowerCase(),
       };
       if (!prismaOffers.cover) {
         return res.status(400).json({
@@ -77,6 +85,7 @@ const handler: NextApiHandler = async (req, res) => {
       console.log('offers', prismaOffers);
       console.log('Contact', prismaContract);
 
+      //find if contract object is already created, if yes check address and add id to offers object, if no creat new contract address. 
       const duplicate = await prisma.contract.findFirst({
         where: {
           Caddress: prismaContract.Caddress,
@@ -87,22 +96,26 @@ const handler: NextApiHandler = async (req, res) => {
       });
       console.log("duplicate", duplicate);
       if (duplicate) {
-        return res.status(400).json({
-          message: "contract address already saved",
-        });
-      };
-
-      const contract = await prisma.contract.create({
-        data: prismaContract,
-      });
-      console.log('contract', contract);
-      if (!contract) {
-        res.status(400).send({
-          message: "database error",
-        });
-        return;
+        if (duplicate.Iaddress != req.body.Aaddress.toLowerCase()) {
+          return res.status(400).json({
+            message: "contract address saved to a different wallet address",
+          });
+        }
+        prismaOffers.contractId = duplicate.id;
       }
-      prismaOffers.contractId = contract.id;
+      else {
+        const contract = await prisma.contract.create({
+          data: prismaContract,
+        });
+        console.log('contract', contract);
+        if (!contract) {
+          res.status(400).send({
+            message: "database error",
+          });
+          return;
+        }
+        prismaOffers.contractId = contract.id;
+      }
 
       const offer = await prisma.offers.create({
         data: prismaOffers,

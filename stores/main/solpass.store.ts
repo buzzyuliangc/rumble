@@ -11,8 +11,9 @@ import { WalletStore } from "./wallet.store";
 import { v4 as uuidv4 } from "uuid";
 import qs from "qs";
 import moment from "moment";
-const walletStore = useStore(WalletStore);
+import { randomBytes } from "crypto";
 
+const walletStore = useStore(WalletStore);
 
 export type Offers = {
     id?: string;
@@ -35,6 +36,7 @@ export type Offers = {
     mintedAt?: Date | null;
     expirationDate?: Date | null;
     imageData?: string;
+
 };
 export class SolpassStore implements IStore {
     static type = StoreType.solpass;
@@ -46,6 +48,8 @@ export class SolpassStore implements IStore {
     ethBalanceFormated: string = "0.00";
 
     marryCount = 0;
+
+    pendingOfferIndex;
 
     info: Offers = {
         burnAuth: 0,
@@ -144,7 +148,7 @@ export class SolpassStore implements IStore {
             }
         }
         const msg = await walletStore.signMessage(uuid);
-        const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
+        /*const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
         if (!result) {
             message.error('Deployment failed, please make sure your wallet is connected and try again');
             return;
@@ -152,9 +156,10 @@ export class SolpassStore implements IStore {
         if (!result.address) {
             message.error("Deployment failed, please make sure your wallet is connected and try again");
             return;
-        }
+        }*/
         body.signature = msg;
-        body.contractAddr = result.address;
+        //body.contractAddr = result.address;
+        body.contractAddr = "0xfdsklfsafskfjaf";
         const offer = await fetch("/api/offer-a", {
             method: "POST",
             headers: {
@@ -163,12 +168,23 @@ export class SolpassStore implements IStore {
             body: JSON.stringify(body),
         });
         const res = await offer.json();
+        const result = await fetch("/api/offer-pending?Aaddress=" + body.Aaddress, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const json = await result.json();
+        if (json.message) {
+            message.error(json.message);
+        } else {
+            this.allPendingOffers = json;
+        }
+
         if (res.id) {
+            this.pendingOfferIndex = 0;
             this.pendingOffer = res;
-            this.pendingOffer.contractAddr = this.info.contractAddr;
-            this.info.status = 1;
             this.info.inviteLink = "/offer/" + res.id;
-            this.getOffer();
         } else {
             message.error(res.message);
         }

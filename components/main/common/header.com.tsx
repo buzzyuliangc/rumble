@@ -70,7 +70,7 @@ export const Header = (props: {
         <a href="/">
           <img
             src="/logo.png"
-            title="marry3"
+            title="Rumble"
             className={styles.logo}
             style={{ display: props.hideAll ? "none" : "" }}
           />

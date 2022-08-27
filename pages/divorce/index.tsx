@@ -36,10 +36,11 @@ import { NFT } from "../../components/main/common/nft";
 import { DivorceStore } from "../../stores/main/divorce.store";
 import ClipboardJS from "clipboard";
 import { Marry3Contract } from "../../contracts";
+import { SolpassStore } from "../../stores/main/solpass.store";
 
 export default function Devorce(props) {
   const divorceStore = useStore(DivorceStore);
-  const marryStore = useStore(MarryStore);
+  const solpassStore = useStore(SolpassStore);
   const walletStore = useStore(WalletStore);
   const router = useRouter();
   const { id } = router.query;
@@ -59,7 +60,7 @@ export default function Devorce(props) {
       divorceStore.info.Aname = walletInfo.ens;
       const loading = message.loading("loading...", 0);
       await divorceStore.getOffer();
-      await marryStore.getOffer();
+      await solpassStore.getOffer();
       loading();
     })();
     const timer = setInterval(() => {
@@ -69,7 +70,7 @@ export default function Devorce(props) {
         });
         clip.on("success", function () {
           message.success("copy success");
-          marryStore.shareClicked = true;
+          solpassStore.shareClicked = true;
         });
         clip.on("error", () => {
           message.error("copy fail");
@@ -130,8 +131,8 @@ export default function Devorce(props) {
         <div className={styles.content}>
           <div className={styles.Page_inner}>
             <Form layout={"vertical"} className={styles.mainForm}>
-              {marryStore.pendingOffer.id &&
-              marryStore.pendingOffer.status == 2 ? (
+              {solpassStore.pendingOffer.id &&
+                solpassStore.pendingOffer.status == 2 ? (
                 <div className={styles.nfts}>
                   <div
                     style={{
@@ -143,11 +144,11 @@ export default function Devorce(props) {
                       nftActiveIndex == 0 ? styles.nft_active : "",
                     ].join(" ")}
                   >
-                    <NFT
-                      offer={marryStore.pendingOffer}
+                    {/*<NFT
+                      offers={solpassStore.allPendingOffers}
                       width={340}
-                      isA={true}
-                    />
+                      index={0}
+                  />*/}
                   </div>
                   <div
                     style={{
@@ -159,11 +160,11 @@ export default function Devorce(props) {
                       nftActiveIndex == 1 ? styles.nft_active : "",
                     ].join(" ")}
                   >
-                    <NFT
-                      offer={marryStore.pendingOffer}
+                    {/*<NFT
+                      offers={solpassStore.allPendingOffers}
                       width={340}
-                      isA={false}
-                    />
+                      index={0}
+                  />*/}
                   </div>
                   <div className={styles.control}>
                     <div
@@ -255,8 +256,8 @@ export default function Devorce(props) {
                     loading={signaing}
                     disabled={
                       !(
-                        marryStore.pendingOffer.id &&
-                        marryStore.pendingOffer.status == 2
+                        solpassStore.pendingOffer.id &&
+                        solpassStore.pendingOffer.status == 2
                       )
                     }
                     style={{ width: "100%" }}

@@ -58,15 +58,23 @@
 }
 
 .Page1 {
-  background: #fff0f3;
+  background: #eceffe;
   // backdrop-filter: blur(84px);
   height: 873px;
   width: 100%;
   overflow: hidden;
 
+  .background_wrapper {
+    background-image: url(/home_background.png);
+    background-repeat: no-repeat;
+    background-size: 503px 873px;
+    background-position: 0px 0px;
+  }
+
   .Page_inner {
     height: 100%;
   }
+
 
   .title {
     width: 656px;
@@ -96,11 +104,6 @@
       }
     }
 
-    background-image: url(/line.png);
-    background-repeat: no-repeat;
-    background-size: 203px;
-    background-position: 280px 138px;
-
     @media @mobile {
       & {
         padding: 0 20px;
@@ -113,11 +116,11 @@
   }
 
   .flower {
-    right: -100px;
+    right: -500px;
     position: absolute;
-    bottom: 30px;
-    width: 489px;
-    height: 489px;
+    bottom: 0px;
+    width: 1300px;
+    height: auto;
 
     @media @mobile {
       & {
@@ -211,12 +214,20 @@
   //   rgba(255, 230, 0, 0.05) 0%,
   //   rgba(239, 60, 210, 0.08) 100%
   // );
-  background: url(/waves.png) no-repeat center center;
+  background: url(/waves.png) no-repeat center bottom;
   background-attachment: fixed;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 10px;
 
   .Page_inner {
     display: flex;
     height: 100%;
+    background: linear-gradient(142.97deg,
+        rgba(255, 230, 0, 0.06) 27.43%,
+        rgba(239, 60, 210, 0.06) 73.23%);
+    border-radius: 23px;
+    padding-right: 25px;
 
     @media @mobile {
       & {
@@ -235,8 +246,10 @@
   }
 
   .left {
-    flex: 1;
     position: relative;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    width: 750px;
 
     @media @mobile {
       & {
@@ -250,66 +263,52 @@
       position: relative;
     }
 
-    .circle_text {
-      position: absolute;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      display: flex;
-      color: #ffffff;
-      align-content: center;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
+    .mainFormWrapper {
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 42px 40px 42px;
 
-      color: rgba(255, 255, 255, 1);
-
-      .t1 {
-        font-size: 20px;
-        line-height: 20px;
-        text-align: center;
+      @media @mobile {
+        padding: 40px 0px 40px 0px;
       }
 
-      .t2 {
-        font-size: 90px;
-        font-family: Jura;
-        line-height: 100px;
-        text-align: center;
-      }
+      position: relative;
 
-      .t3 {
-        color: #ff8ebb;
-        font-size: 15px;
-        text-align: center;
-        line-height: 20px;
-        margin-top: 20px;
-      }
-
-      .t4 {
-        color: #c4c4c4;
-        font-weight: 300;
-        height: 32px;
-        font-size: 12px;
+      .mainFormBG {
         position: absolute;
-        bottom: 100px;
-        text-align: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        //background: linear-gradient(142.97deg,
+        //    rgba(255, 230, 0, 0.06) 27.43%,
+        //    rgba(239, 60, 210, 0.06) 73.23%);
+        z-index: -1;
+        border-radius: 23px;
+      }
 
-        @media @mobile {
-          & {
-            bottom: 0px;
-          }
-        }
+      :global(.ant-list-item) {
+        border-radius: 23px;
+        cursor: pointer;
+        border: 2px dashed 1px #d4eefc;
+      }
+
+      :global(.ant-list-item):hover {
+        box-shadow: 0 0 4px rgb(159, 179, 253);
+      }
+
+      :global(.ant-list) {
+        height: 100%;
       }
     }
   }
 
   .right {
     width: 484px;
-    padding-bottom: 50px;
+    padding-top: 25px;
+    padding-bottom: 25px;
     position: relative;
-    padding-top: 50px;
+
 
     @media @mobile {
       & {
@@ -320,10 +319,10 @@
     .mainFormWrapper {
       width: 100%;
       margin: 0 auto;
-      padding: 80px 42px 40px 42px;
+      padding: 40px 42px 40px 42px;
 
       @media @mobile {
-        padding: 80px 0px 40px 0px;
+        padding: 40px 0px 40px 0px;
       }
 
       position: relative;

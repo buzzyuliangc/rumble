@@ -114,7 +114,7 @@ export default function Offer(props) {
                   nftActiveIndex == 0 ? styles.nft_active : "",
                 ].join(" ")}
               >
-                <NFT offer={offer} width={340} isA={offer?.AtokenId == id} />
+                {/*<NFT offers={[offer]} width={340} index={0} />*/}
               </div>
               <div
                 style={{
@@ -126,7 +126,7 @@ export default function Offer(props) {
                   nftActiveIndex == 1 ? styles.nft_active : "",
                 ].join(" ")}
               >
-                <NFT offer={offer} width={340} isA={offer?.AtokenId != id} />
+                {/*<NFT offers={[offer]} width={340} index={0} />*/}
               </div>
               <div className={styles.control}>
                 <div

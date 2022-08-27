@@ -7,6 +7,7 @@ import { message } from "antd";
 import { EventEmitter } from "eventemitter3";
 import Das from "das-sdk";
 const bus = new EventEmitter();
+
 export class WalletStore implements IStore {
   type = StoreType.web3modal;
   static type = StoreType.web3modal;
@@ -79,6 +80,7 @@ export class WalletStore implements IStore {
 
   async connect() {
     await wallet.connect();
+    //solpassStore.getOffer();
     return;
   }
 

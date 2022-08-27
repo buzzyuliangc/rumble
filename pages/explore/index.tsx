@@ -21,7 +21,7 @@ import {
 } from "antd";
 import { NFTStore } from "../../stores/main/nfts.store";
 import { NFT } from "../../components/main/common/nft";
-import { Offers } from "../../stores/main/marry.store";
+import { Offers } from "../../stores/main/solpass.store";
 import moment from "moment";
 import { web3Config } from "../../stores/config";
 import { Footer } from "../../components/main/common/footer.com";

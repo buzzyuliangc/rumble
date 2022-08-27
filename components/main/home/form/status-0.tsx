@@ -1,5 +1,5 @@
 import { ethers } from "ethers"
-import type { RadioChangeEvent, DatePickerProps } from 'antd';
+import { RadioChangeEvent, DatePickerProps, Modal } from 'antd';
 import {
   Button,
   DatePicker,
@@ -35,8 +35,13 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import moment from "moment";
 
-
-
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
 
 export const Status0 = (props: {}) => {
 
@@ -46,7 +51,19 @@ export const Status0 = (props: {}) => {
   const solpassStore = useStore(SolpassStore);
   const walletStore = useStore(WalletStore);
   const [submiting, setSubmiting] = useState(false);
-  const client = ipfsHttpClient({ url: 'https://ipfs.infura.io:5001/api/v0' });
+  const projectId = '2DdOfhpepWwdoHOxnzi9eMjTJ36';
+  const projectSecret = '89a6f73c724ef744a90bb9ffc3a43e6a';
+  const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+
+  const client = ipfsHttpClient({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    apiPath: '/api/v0',
+    headers: {
+      authorization: auth
+    }
+  })
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -55,6 +72,8 @@ export const Status0 = (props: {}) => {
   const [expHidden, setExpHidden] = useState(1);
   const [expDate, setExpDate] = useState<Date>(null);
   const [uploadCheck, setUploadCheck] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
 
   const expRadioOnChange = (e: RadioChangeEvent) => {
     if (e.target.value === 1) {
@@ -114,7 +133,7 @@ export const Status0 = (props: {}) => {
         const result = await client.add(file)
         console.log(result)
         solpassStore.info.cover = result.path
-        setImageUrl(`https://ipfs.infura.io/ipfs/${result.path}`)
+        setImageUrl(`https://rumble.infura-ipfs.io/ipfs/${result.path}`)
         console.log('sol expiration', solpassStore.info.expirationDate);
         console.log('sol burnAuth', solpassStore.info.burnAuth);
       } catch (error) {
@@ -175,12 +194,29 @@ export const Status0 = (props: {}) => {
       ]}
     />
   );
+
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <PlusOutlined />
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
+  const handleCancel = () => setPreviewVisible(false);
+
+  const handleRemove = () => {
+    setImageUrl("");
+    solpassStore.info.cover = null;
+  };
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewVisible(true);
+  };
   return useObserver(() => (
     <Form {...formItemLayout} layout={"vertical"} className={styles.mainForm}>
       <Form.Item
@@ -199,12 +235,18 @@ export const Status0 = (props: {}) => {
           name="cover"
           listType="picture-card"
           className="cover-uploader"
-          showUploadList={false}
+          showUploadList={true}
           beforeUpload={beforeUpload}
           onChange={uploadToIPFS}
+          onPreview={handlePreview}
+          onRemove={handleRemove}
         >
-          {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+          {imageUrl ? null : uploadButton}
         </Upload>
+        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={imageUrl} />
+        </Modal>
+
       </Form.Item>
       <Form.Item label='Your Name'>
         <Input.Group
