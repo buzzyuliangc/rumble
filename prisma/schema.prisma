@@ -60,5 +60,5 @@ model Token {
     Raddress  String
     Caddress  String
     createdAt DateTime @default(now())
-    minted    Boolean
+    minted    Int      @default(0)
 }
