@@ -42,6 +42,8 @@ model Offers {
     burnAuth   Int?     @default(0)
     nftName    String?
     expirationDate DateTime?
+    totalMinted Int?
+    totalSigned Int?
 }
 
 model Contract {

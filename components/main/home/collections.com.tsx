@@ -48,6 +48,7 @@ export const Collections = (props: {}) => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    //var data = [];
 
     async function getOffers(address?: string) {
         setLoading(true);
@@ -85,8 +86,24 @@ export const Collections = (props: {}) => {
 
     useEffect(() => {
         setOffers(solpassStore.allPendingOffers);
-        setTotal(offers.length);
-    }, [solpassStore.pendingOffer.status])
+        setTotal(solpassStore.allPendingOffers.length);
+        console.log("the total is", total);
+        console.log("all pd", solpassStore.allPendingOffers.length)
+    }, [solpassStore.pendingOffer.status, solpassStore.allPendingOffers])
+
+    /*useEffect(() => {
+        data = Array.from({ length: total }).map((_, i) => ({
+            id: i,
+            title: `ant design part ${i}`,
+            nftName: offers[i].nftName,
+            description:
+                offers[i].contractAddr,
+            content:
+                offers[i].Acomment,
+            cover:
+                offers[i].cover,
+        }));
+    }, [total])*/
 
 
     const data = Array.from({ length: total }).map((_, i) => ({
@@ -113,7 +130,7 @@ export const Collections = (props: {}) => {
                     pageSize: 3,
                 }}
                 loading={loading}
-                dataSource={data}
+                dataSource={[...data]}
                 //footer={
                 //    <div>
                 //        <b>ant design</b> footer part

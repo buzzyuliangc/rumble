@@ -46,7 +46,6 @@ export default function Offer(props) {
       const loading = message.loading("loading");
       offerStore.getOffer();
       loading();
-      nftStore.getNFTS();
     }
     (async () => {
       const walletInfo = await walletStore.getWalletInfo();
@@ -147,13 +146,13 @@ export default function Offer(props) {
                     <div>
                       <img
                         src="/logo.png"
-                        title="marry3"
+                        title="Rumble"
                         className={styles.logo}
                       />
                     </div>
-                    <Trans id="基于 ERC520 开发" />
+                    Developed Based on ERC5484
                     <a
-                      href="https://github.com/marryinweb3/erc520"
+                      href="https://github.com/"
                       style={{ marginLeft: "10px" }}
                     >
                       Github
@@ -167,20 +166,29 @@ export default function Offer(props) {
                     title="xin"
                   />
                   <Form layout={"vertical"} className={styles.mainForm}>
-                    <Form.Item
-                      label={
-                        <span>
-                          {t`NFT PMP`}
-                          <Tooltip
-                            title={t`选择的 NFT 头像将被印到 Marry3 Certificate NFT 中`}
-                          >
-                            <QuestionCircleOutlined
-                              style={{ marginLeft: "5px" }}
-                            />
-                          </Tooltip>
-                        </span>
-                      }
-                    >
+                    <Form.Item label={t`your name`}>
+                      <Input.Group
+                        compact
+                        style={{
+                          display: "inline-block",
+                          verticalAlign: "8px",
+                        }}
+                      >
+                        <Input
+                          value={offerStore.form.Bname}
+                          placeholder="your ens name or nick"
+                          onChange={async (e) => {
+                            offerStore.form.Bname = e.target.value;
+                          }}
+                          style={{ width: "calc(100% - 140px)" }}
+                        />
+                        <Dropdown overlay={menu}>
+                          <Button style={{ width: "40px" }}>
+                            <DownOutlined />
+                          </Button>
+                        </Dropdown>
+                      </Input.Group>
+
                     </Form.Item>
 
                     {walletStore.walletInfo.account ? (

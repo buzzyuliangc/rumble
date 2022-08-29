@@ -96,7 +96,6 @@ export class OfferStore implements IStore {
   }
 
   async getOffer() {
-    const account = (await walletStore.getWalletInfo()).account;
     const result = await fetch("/api/offer?id=" + this.offer.id, {
       method: "GET",
       headers: {
