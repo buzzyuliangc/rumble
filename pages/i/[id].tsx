@@ -21,6 +21,7 @@ import wallet from "../../contracts/wallet";
 import Head from "next/head";
 import { web3Config } from "../../stores/config";
 import QRCode from "qrcode";
+
 export default function Offer(props) {
   const walletStore = useStore(WalletStore);
 

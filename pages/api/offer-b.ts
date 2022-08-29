@@ -32,7 +32,6 @@ const handler: NextApiHandler = async (req, res) => {
         id: req.body.id,
         Baddress: req.body.address.toLowerCase(),
         Bsignature: req.body.signature,
-        status: 1,
         Bname: req.body.Bname,
       };
       if (!data.Bname) {
@@ -40,19 +39,20 @@ const handler: NextApiHandler = async (req, res) => {
           message: "name empty",
         });
       }
-      /*const marriedB = await verifyMarried(data.Baddress);
-
-      if (marriedB) {
+      const accepted = await prisma.token.findFirst({
+        where: {
+          offersId: data.id,
+          Raddress: data.Baddress,
+        },
+      });
+      if (accepted) {
         return res.status(400).json({
-          message: "you have married",
+          message: "offer already accepted",
         });
-      }*/
-      // check
+      }
       const result = await prisma.offers.findFirst({
         where: {
           id: data.id,
-          status: 0,
-          type: 0,
         },
       });
       if (!result) {
@@ -60,22 +60,36 @@ const handler: NextApiHandler = async (req, res) => {
           message: "no offer to accept",
         });
       }
-      /*if (result.Aaddress == data.Baddress) {
-        return res.status(400).json({
-          message: "Aaddress and Baddress is same",
-        });
-      }*/
-      // update offer
-      const offer = await prisma.offers.update({
-        data: data,
-        where: {
-          id: data.id,
-        },
+      const tokenInfo = {
+        offersId: data.id,
+        Bsignature: data.Bsignature,
+        Bname: data.Bname,
+        Iaddress: result.Aaddress,
+        Raddress: data.Baddress,
+        Caddress: result.contractAddr,
+      }
+
+
+      const token = await prisma.token.create({
+        data: tokenInfo,
       });
-      if (offer) {
-        delete offer.Asignature;
-        delete offer.Bsignature;
-        res.status(200).json(offer);
+      if (token && result) {
+        await prisma.offers.update({
+          where: { id: data.id },
+          data: { totalSigned: { increment: 1 } }
+        })
+        res.status(200).json(token);
+        await prisma.offers.update({
+          where: { id: data.id },
+          data: { totalSigned: { increment: 1 } }
+        });
+        return;
+      }
+      else {
+        res.status(400).json({
+          message: "error",
+        });
+        return;
       }
     } catch (e) {
       console.error(e);

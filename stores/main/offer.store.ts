@@ -25,11 +25,27 @@ export type Offers = {
   cover?: string | null;
   inviteLink?: string | null;
 };
+
+export type Token = {
+  id?: string;
+  offersId?: string;
+  tokenId?: string | null;
+  Bsignature?: string | null;
+  Bname?: string;
+  Iaddress?: string;
+  Raddress?: string;
+  Caddress?: string;
+  minted?: number;
+}
 export class OfferStore implements IStore {
   static type = StoreType.offer;
   type = StoreType.offer;
 
   offer: Offers = {};
+
+  token: Token = {};
+
+  signed = false;
 
   form = {
     Baddress: "",
@@ -53,20 +69,26 @@ export class OfferStore implements IStore {
       return 0;
     }
   }
-  async accept() {
-    const nonce = "i will";
 
+  async accept() {
+    console.log("body1");
+    const nonce = "i will";
+    //use uuid of offer as nonce
+    console.log("body2");
     const body = {
       nonce,
       signature: "",
       id: this.offer.id,
-      address: (await walletStore.getWalletInfo()).account,
+      //address: (await walletStore.getWalletInfo()).account, changes to walletstore getWalletInfo breaks this
+      address: walletStore.walletInfo.account,
       Bname: this.form.Bname,
     };
+    console.log("body3");
     if (!body.Bname) {
-      message.error("please input your nick");
+      message.error("please input your nickname");
       return;
     }
+    console.log("body is", body);
     if (body.Bname.indexOf(".eth") != -1) {
       const ens = await walletStore.getENS(body.address);
       console.log(ens);
@@ -79,18 +101,19 @@ export class OfferStore implements IStore {
     }
     const msg = await walletStore.signMessage(nonce);
     body.signature = msg;
-    const offer = await fetch("/api/offer-b", {
+    const token = await fetch("/api/offer-b", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
     });
-    const json = await offer.json();
+    const json = await token.json();
     if (json.message) {
       message.error(json.message);
     } else {
-      this.offer = json as Offers;
+      this.signed = true;
+      this.token = json as Token;
       message.success("accept success");
     }
   }
@@ -109,10 +132,29 @@ export class OfferStore implements IStore {
     } else {
       this.offer = json;
     }
-    // if (this.offer.status == 0) {
-    //   setTimeout(() => {
-    //     this.getOffer();
-    //   }, 3000);
-    // }
+  }
+
+  async getToken() {
+    console.log("gettoken");
+    if (this.token.id) {
+      const result = await fetch("/api/token?tokenId=" + this.token.id, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await result.json();
+      if (json.message) {
+        message.error(json.message);
+        this.is404 = true;
+      } else {
+        this.token = json;
+      }
+    }
+    if (!this.token.minted) {
+      setTimeout(() => {
+        this.getToken();
+      }, 3000);
+    }
   }
 }

@@ -41,7 +41,7 @@ export class WalletStore implements IStore {
   // 获取钱包余额详情
   async getAccountWalletInfo() {
     console.log("getAccountWalletInfo");
-    const walletInfo: IWallet = {};
+    const walletInfo: IWallet = { status: "disconnected" };
     try {
       const signer = await wallet.getWalletSigner();
       console.log("signer", signer);
@@ -90,8 +90,7 @@ export class WalletStore implements IStore {
 
   async getWalletInfo(): Promise<IWallet> {
     return new Promise((resolve) => {
-      console.log('status is', this.walletInfo.status);
-
+      //figure out
       //if (this.walletInfo.status !== "connected") {
       bus.on("connected", () => {
         resolve(this.walletInfo);
@@ -99,7 +98,8 @@ export class WalletStore implements IStore {
       /*} else {
         resolve(this.walletInfo);
       }*/
-    });
+    }
+    );
   }
 
   async signMessage(_message: string): Promise<string> {

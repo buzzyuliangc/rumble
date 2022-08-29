@@ -46,6 +46,7 @@ export default function Offer(props) {
       const loading = message.loading("loading");
       offerStore.getOffer();
       loading();
+      //offerStore.getToken();
     }
     (async () => {
       const walletInfo = await walletStore.getWalletInfo();
@@ -70,6 +71,7 @@ export default function Offer(props) {
       setEnsList(items);
     })();
   }, [router.query.id]);
+
   const formItemLayout = {
     labelCol: { span: 12 },
     wrapperCol: { span: 12 },
@@ -196,6 +198,7 @@ export default function Offer(props) {
                         onClick={async () => {
                           setAccepting(true);
                           try {
+                            console.log("test1");
                             await offerStore.accept();
                           } catch (e) {
                             message.error(e);
@@ -203,13 +206,13 @@ export default function Offer(props) {
 
                           setAccepting(false);
                         }}
-                        disabled={offerStore.offer.status !== 0}
+                        disabled={offerStore.signed}
                         type="primary"
                         loading={accepting}
                         style={{ width: "100%" }}
                         className="shake-little"
                       >
-                        {offerStore.offer.status == 0 ? (
+                        {!offerStore.signed ? (
                           <Trans id="签名回复对方" />
                         ) : (
                           <Trans id="已回复，请通知对方 Mint" />

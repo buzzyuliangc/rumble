@@ -58,6 +58,8 @@ model Token {
     id        String   @id @default(uuid())
     offersId  String   
     tokenId   String?
+    Bsignature String
+    Bname     String
     Iaddress  String
     Raddress  String
     Caddress  String
