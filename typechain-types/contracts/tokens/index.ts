@@ -11,6 +11,8 @@ import type * as erc721TokenReceiverSol from "./erc721-token-receiver.sol";
 export type { erc721TokenReceiverSol };
 import type * as erc721Sol from "./erc721.sol";
 export type { erc721Sol };
+import type * as erc72142Sol from "./erc721_42.sol";
+export type { erc72142Sol };
 import type * as erc721520TokenSol from "./erc721_520-token.sol";
 export type { erc721520TokenSol };
 import type * as erc721520Sol from "./erc721_520.sol";

@@ -74,6 +74,9 @@ export const Collections = (props: {}) => {
 
     function toPass(index?: number) {
         setLoading(true);
+        if (solpassStore.pendingOffer && solpassStore.pendingOffer.status != undefined) {
+            solpassStore.pendingOffer.status = 0;
+        }
         if (total > 0) {
             solpassStore.pendingOffer = offers[index];
             solpassStore.pendingOfferIndex = index;

@@ -34,13 +34,11 @@ export interface SolpassInterface extends utils.Interface {
     "NOT_CURRENT_OWNER()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "burn(uint256,bytes32[])": FunctionFragment;
+    "burn(uint256)": FunctionFragment;
     "expirationDate(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getPrice()": FunctionFragment;
-    "getPriceByProof(bytes32[])": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(address,string,uint256,bytes,bytes32[])": FunctionFragment;
+    "mint(address,string,uint256,bytes)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -61,9 +59,7 @@ export interface SolpassInterface extends utils.Interface {
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updateBurnNonce(string)": FunctionFragment;
     "updateNonce(string)": FunctionFragment;
-    "updatePriceMax(uint256)": FunctionFragment;
     "withdraw(address)": FunctionFragment;
   };
 
@@ -76,8 +72,6 @@ export interface SolpassInterface extends utils.Interface {
       | "burn"
       | "expirationDate"
       | "getApproved"
-      | "getPrice"
-      | "getPriceByProof"
       | "isApprovedForAll"
       | "mint"
       | "name"
@@ -100,9 +94,7 @@ export interface SolpassInterface extends utils.Interface {
       | "totalSupply"
       | "transferFrom"
       | "transferOwnership"
-      | "updateBurnNonce"
       | "updateNonce"
-      | "updatePriceMax"
       | "withdraw"
   ): FunctionFragment;
 
@@ -124,7 +116,7 @@ export interface SolpassInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "burn",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>[]]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "expirationDate",
@@ -133,11 +125,6 @@ export interface SolpassInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(functionFragment: "getPrice", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getPriceByProof",
-    values: [PromiseOrValue<BytesLike>[]]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
@@ -149,8 +136,7 @@ export interface SolpassInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>[]
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
@@ -238,16 +224,8 @@ export interface SolpassInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "updateBurnNonce",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "updateNonce",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updatePriceMax",
-    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
@@ -271,11 +249,6 @@ export interface SolpassInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getPriceByProof",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -346,15 +319,7 @@ export interface SolpassInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "updateBurnNonce",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "updateNonce",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updatePriceMax",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -510,7 +475,6 @@ export interface Solpass extends BaseContract {
 
     burn(
       _tokenId: PromiseOrValue<BigNumberish>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -524,13 +488,6 @@ export interface Solpass extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getPriceByProof(
-      _merkleProof: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     isApprovedForAll(
       _owner: PromiseOrValue<string>,
       _operator: PromiseOrValue<string>,
@@ -542,7 +499,6 @@ export interface Solpass extends BaseContract {
       _uri: PromiseOrValue<string>,
       _expirationDate: PromiseOrValue<BigNumberish>,
       _signature: PromiseOrValue<BytesLike>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -637,18 +593,8 @@ export interface Solpass extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    updateBurnNonce(
-      _nonce: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     updateNonce(
       _nonce: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePriceMax(
-      _priceMax: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -675,7 +621,6 @@ export interface Solpass extends BaseContract {
 
   burn(
     _tokenId: PromiseOrValue<BigNumberish>,
-    _merkleProof: PromiseOrValue<BytesLike>[],
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -689,13 +634,6 @@ export interface Solpass extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getPriceByProof(
-    _merkleProof: PromiseOrValue<BytesLike>[],
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   isApprovedForAll(
     _owner: PromiseOrValue<string>,
     _operator: PromiseOrValue<string>,
@@ -707,7 +645,6 @@ export interface Solpass extends BaseContract {
     _uri: PromiseOrValue<string>,
     _expirationDate: PromiseOrValue<BigNumberish>,
     _signature: PromiseOrValue<BytesLike>,
-    _merkleProof: PromiseOrValue<BytesLike>[],
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -800,18 +737,8 @@ export interface Solpass extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  updateBurnNonce(
-    _nonce: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   updateNonce(
     _nonce: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePriceMax(
-    _priceMax: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -838,7 +765,6 @@ export interface Solpass extends BaseContract {
 
     burn(
       _tokenId: PromiseOrValue<BigNumberish>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -852,13 +778,6 @@ export interface Solpass extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPriceByProof(
-      _merkleProof: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     isApprovedForAll(
       _owner: PromiseOrValue<string>,
       _operator: PromiseOrValue<string>,
@@ -870,7 +789,6 @@ export interface Solpass extends BaseContract {
       _uri: PromiseOrValue<string>,
       _expirationDate: PromiseOrValue<BigNumberish>,
       _signature: PromiseOrValue<BytesLike>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -963,18 +881,8 @@ export interface Solpass extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    updateBurnNonce(
-      _nonce: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     updateNonce(
       _nonce: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePriceMax(
-      _priceMax: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1085,7 +993,6 @@ export interface Solpass extends BaseContract {
 
     burn(
       _tokenId: PromiseOrValue<BigNumberish>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1096,13 +1003,6 @@ export interface Solpass extends BaseContract {
 
     getApproved(
       _tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPriceByProof(
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1117,7 +1017,6 @@ export interface Solpass extends BaseContract {
       _uri: PromiseOrValue<string>,
       _expirationDate: PromiseOrValue<BigNumberish>,
       _signature: PromiseOrValue<BytesLike>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1210,18 +1109,8 @@ export interface Solpass extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    updateBurnNonce(
-      _nonce: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     updateNonce(
       _nonce: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePriceMax(
-      _priceMax: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1251,7 +1140,6 @@ export interface Solpass extends BaseContract {
 
     burn(
       _tokenId: PromiseOrValue<BigNumberish>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1262,13 +1150,6 @@ export interface Solpass extends BaseContract {
 
     getApproved(
       _tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getPriceByProof(
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1283,7 +1164,6 @@ export interface Solpass extends BaseContract {
       _uri: PromiseOrValue<string>,
       _expirationDate: PromiseOrValue<BigNumberish>,
       _signature: PromiseOrValue<BytesLike>,
-      _merkleProof: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1376,18 +1256,8 @@ export interface Solpass extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    updateBurnNonce(
-      _nonce: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     updateNonce(
       _nonce: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePriceMax(
-      _priceMax: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

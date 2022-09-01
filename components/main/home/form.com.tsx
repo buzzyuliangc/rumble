@@ -73,10 +73,9 @@ export const FormPage = (props: {}) => {
               className={styles.steps}
               responsive={false}
             >
-              <Steps.Step title='Sign & Deploy Solpass' />
-              <Steps.Step title='Share Link to member' />
-              <Steps.Step title='Receiver Signature' />
-              <Steps.Step title='Mint SBTs' />
+              <Steps.Step title='Initiate Solpass' />
+              <Steps.Step title='Share Link' />
+              <Steps.Step title='Mint Solpass' />
             </Steps>
             <FormDesc />
           </div>

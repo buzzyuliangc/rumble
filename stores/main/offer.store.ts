@@ -71,10 +71,8 @@ export class OfferStore implements IStore {
   }
 
   async accept() {
-    console.log("body1");
     const nonce = "i will";
     //use uuid of offer as nonce
-    console.log("body2");
     const body = {
       nonce,
       signature: "",
@@ -83,12 +81,10 @@ export class OfferStore implements IStore {
       address: walletStore.walletInfo.account,
       Bname: this.form.Bname,
     };
-    console.log("body3");
     if (!body.Bname) {
       message.error("please input your nickname");
       return;
     }
-    console.log("body is", body);
     if (body.Bname.indexOf(".eth") != -1) {
       const ens = await walletStore.getENS(body.address);
       console.log(ens);

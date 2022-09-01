@@ -2,7 +2,7 @@
     {
         "inputs": [
             {
-                "internalType": "enum ERC42.BurnAuth",
+                "internalType": "enum ERC721_42.BurnAuth",
                 "name": "_burnAuth",
                 "type": "uint8"
             },
@@ -279,11 +279,6 @@
                 "internalType": "uint256",
                 "name": "_tokenId",
                 "type": "uint256"
-            },
-            {
-                "internalType": "bytes32[]",
-                "name": "_merkleProof",
-                "type": "bytes32[]"
             }
         ],
         "name": "burn",
@@ -324,38 +319,6 @@
                 "internalType": "address",
                 "name": "",
                 "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32[]",
-                "name": "_merkleProof",
-                "type": "bytes32[]"
-            }
-        ],
-        "name": "getPriceByProof",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -406,11 +369,6 @@
                 "internalType": "bytes",
                 "name": "_signature",
                 "type": "bytes"
-            },
-            {
-                "internalType": "bytes32[]",
-                "name": "_merkleProof",
-                "type": "bytes32[]"
             }
         ],
         "name": "mint",
@@ -632,7 +590,7 @@
         "name": "tokenBurnAuth",
         "outputs": [
             {
-                "internalType": "enum ERC42.BurnAuth",
+                "internalType": "enum ERC721_42.BurnAuth",
                 "name": "",
                 "type": "uint8"
             }
@@ -772,33 +730,7 @@
                 "type": "string"
             }
         ],
-        "name": "updateBurnNonce",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "_nonce",
-                "type": "string"
-            }
-        ],
         "name": "updateNonce",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_priceMax",
-                "type": "uint256"
-            }
-        ],
-        "name": "updatePriceMax",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

@@ -5,7 +5,7 @@ import { prisma } from "../../lib/prisma";
 import { verifyMarried } from "../../lib/verify";
 
 const handler: NextApiHandler = async (req, res) => {
-    if (req.method === "POST") {
+    if (req.method === "GET") {
         try {
             // verify signature
             if (!req.body.tokenId) {
@@ -13,7 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
                     message: "name empty",
                 });
             }
-            const token = await prisma.offers.findFirst({
+            const token = await prisma.token.findFirst({
                 where: {
                     id: req.body.tokenId,
                 },

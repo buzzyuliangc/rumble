@@ -20,7 +20,6 @@ const handler: NextApiHandler = (req, res) => {
     console.log(address);
     const proof = merkleTree.getHexProof(keccak256(address));
     console.log("proof", proof);
-    // 这里可以验证proof是否正确
     const v = merkleTree.verify(proof, keccak256(address), rootHash);
     res.status(200).json({ proof: proof, in: v });
   } else {

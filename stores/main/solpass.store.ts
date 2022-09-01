@@ -2,7 +2,7 @@ import { message, Modal } from "antd";
 import { BigNumber, utils } from "ethers";
 import { action, computed, makeAutoObservable } from "mobx";
 import { Marry3Contract } from "../../contracts";
-import { deploySolpass } from "../../contracts";
+import { deploySolpass, factory, SolpassContract } from "../../contracts";
 import wallet from "../../contracts/wallet";
 import { web3Config } from "../config";
 import { IStore, StoreType } from "../store.interface";
@@ -36,8 +36,23 @@ export type Offers = {
     mintedAt?: Date | null;
     expirationDate?: Date | null;
     imageData?: string;
+    totalMinted?: number;
+    totalSigned?: number;
 
 };
+
+export type Tokens = {
+    id?: string;
+    offersId?: string;
+    tokenId?: string;
+    Bsignature?: string;
+    Bname?: string;
+    Iaddress?: string;
+    Raddress?: string;
+    Caddress?: string;
+    minted?: number;
+};
+
 export class SolpassStore implements IStore {
     static type = StoreType.solpass;
     type = StoreType.solpass;
@@ -59,6 +74,8 @@ export class SolpassStore implements IStore {
     pendingOffer: Offers = {};
 
     allPendingOffers: Offers[] = [];
+
+    pendingOfferTokens: Tokens[] = [];
 
     proof: string[] = [];
 
@@ -88,10 +105,9 @@ export class SolpassStore implements IStore {
     @action
     stepStatus() {
         if (this.pendingOffer.status === 0) {
-            if (this.shareClicked) return 2;
-            else return 1;
+            return 1;
         } else if (this.pendingOffer.status === 1) {
-            return 3;
+            return 2;
         } else if (this.pendingOffer.status === 2) {
             return 4;
         } else {
@@ -148,7 +164,7 @@ export class SolpassStore implements IStore {
             }
         }
         const msg = await walletStore.signMessage(uuid);
-        /*const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
+        const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
         if (!result) {
             message.error('Deployment failed, please make sure your wallet is connected and try again');
             return;
@@ -156,10 +172,12 @@ export class SolpassStore implements IStore {
         if (!result.address) {
             message.error("Deployment failed, please make sure your wallet is connected and try again");
             return;
-        }*/
+        }
+        await result.wait();
+        message.success("Solpass Contract Deployed");
         body.signature = msg;
-        //body.contractAddr = result.address;
-        body.contractAddr = "0xfdsklfsafskfjaf";
+        body.contractAddr = result.address;
+
         const offer = await fetch("/api/offer-a", {
             method: "POST",
             headers: {
@@ -168,13 +186,13 @@ export class SolpassStore implements IStore {
             body: JSON.stringify(body),
         });
         const res = await offer.json();
-        const result = await fetch("/api/offer-pending?Aaddress=" + body.Aaddress, {
+        const result2 = await fetch("/api/offer-pending?Aaddress=" + body.Aaddress, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
         });
-        const json = await result.json();
+        const json = await result2.json();
         if (json.message) {
             message.error(json.message);
         } else {
@@ -188,26 +206,31 @@ export class SolpassStore implements IStore {
         } else {
             message.error(res.message);
         }
-        console.log(res);
     }
     async mint(
         _addressB: string,
-        _signatureB: string,
-        _expDate: string,
         _tokenURI: string,
+        _expDate: string,
+        _signatureB: string,
     ) {
-        const walletInfo = await walletStore.getWalletInfo();
+        //const walletInfo = await walletStore.getWalletInfo();
         try {
             if (this.proof) {
-                const result = await Marry3Contract()[
-                    "mint(address, string, uint8, bytes, bytes32[])"
-                ](_addressB, _tokenURI, _expDate, _signatureB, this.proof, {
+                /*const solpassContract = factory(
+                    ABI_SOLPAS,
+                    web3Config.address.marry3
+                );*/
+                console.log("yes man");
+                const result = await SolpassContract()[
+                    "mint(address,string,uint256,bytes)"
+                ](_addressB, _tokenURI, 20080808, _signatureB, {
                     value: this.mintPrice,
                 });
                 await result.wait();
                 console.log("mint result", result);
                 message.success("mint success");
                 this.pendingOffer.tokenId = result.toString();
+
                 this.pendingOffer.status = 2;
 
                 return result.blockNumber;
@@ -327,7 +350,7 @@ export class SolpassStore implements IStore {
         const walletInfo = await walletStore.getWalletInfo();
         await this.getMerkle();
         //const mintPrice = await Marry3Contract().getPriceByProof(this.proof);
-        this.mintPrice = BigNumber.from('42');
+        this.mintPrice = BigNumber.from('0');
         this.mintPriceFormated = utils.formatEther(this.mintPrice);
         console.log("mintPrice", this.mintPriceFormated);
 
@@ -344,10 +367,7 @@ export class SolpassStore implements IStore {
 
     async getOffer() {
         const account = (await walletStore.getWalletInfo()).account;
-
         try {
-            //could be multiple offers?
-            //returns a list of all offers pending
             const result = await fetch("/api/offer-pending?Aaddress=" + account, {
                 method: "GET",
                 headers: {
@@ -356,7 +376,6 @@ export class SolpassStore implements IStore {
             });
             const json = await result.json();
             if (!json.message) {
-                //for now only considering first offer
                 this.allPendingOffers = json;
                 this.pendingOffer = json[0];
             }
@@ -367,6 +386,43 @@ export class SolpassStore implements IStore {
                 this.getOffer();
             }, 3000);
         }
+    }
+
+    async getTokens() {
+        const account = walletStore.walletInfo.account;
+        try {
+            //const uuid = uuidv4();
+            //const msg = await walletStore.signMessage(uuid);
+            //add sig check to improve api security
+            const body = {
+                Aaddress: account,
+                offerId: this.pendingOffer.id,
+            };
+            const result = await fetch("/api/fetch-offer-tokens", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+            });
+            const json = await result.json();
+            if (!json.message) {
+                this.pendingOfferTokens = json;
+            }
+            else {
+                message.error(json.message);
+                console.log(json.message);
+            }
+        } catch (e) {
+            message.error(e);
+        }
+
+        if (this.pendingOffer) {
+            setTimeout(() => {
+                this.getTokens();
+            }, 3000);
+        }
+
     }
     async revoke() {
         const uuid = uuidv4();

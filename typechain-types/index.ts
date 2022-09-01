@@ -26,6 +26,8 @@ export type { Solpass } from "./contracts/solpass/solpass.sol/Solpass";
 export { Solpass__factory } from "./factories/contracts/solpass/solpass.sol/Solpass__factory";
 export type { ERC42 } from "./contracts/tokens/erc42.sol/ERC42";
 export { ERC42__factory } from "./factories/contracts/tokens/erc42.sol/ERC42__factory";
+export type { ERC721_42 } from "./contracts/tokens/erc721_42.sol/ERC721_42";
+export { ERC721_42__factory } from "./factories/contracts/tokens/erc721_42.sol/ERC721_42__factory";
 export type { ERC721_520Token } from "./contracts/tokens/erc721_520-token.sol/ERC721_520Token";
 export { ERC721_520Token__factory } from "./factories/contracts/tokens/erc721_520-token.sol/ERC721_520Token__factory";
 export type { ERC721_520 } from "./contracts/tokens/erc721_520.sol/ERC721_520";

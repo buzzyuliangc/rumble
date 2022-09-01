@@ -8,8 +8,6 @@ import { verifyMarried } from "../../lib/verify";
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === "POST") {
     try {
-      // verify signature
-
       let verfiyAddress;
       if (req.query.nonce && req.query.signature) {
         const hash = ethers.utils.keccak256(
@@ -51,9 +49,6 @@ const handler: NextApiHandler = async (req, res) => {
             return res.status(200).json(offer);
           }
         }
-        // delete offer.Asignature;
-        // delete offer.Bsignature;
-        // res.status(200).json(offer);
       }
     } catch (e) {
       console.error(e);

@@ -79,10 +79,6 @@ const handler: NextApiHandler = async (req, res) => {
           data: { totalSigned: { increment: 1 } }
         })
         res.status(200).json(token);
-        await prisma.offers.update({
-          where: { id: data.id },
-          data: { totalSigned: { increment: 1 } }
-        });
         return;
       }
       else {

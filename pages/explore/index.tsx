@@ -26,7 +26,9 @@ import moment from "moment";
 import { web3Config } from "../../stores/config";
 import { Footer } from "../../components/main/common/footer.com";
 
-export default function Offer(props) {
+export default function Offer(props: {
+  offerId?: number;
+}) {
   const walletStore = useStore(WalletStore);
 
   const router = useRouter();
@@ -140,6 +142,7 @@ export default function Offer(props) {
           <Form.Item className={styles.search}>
             <Input
               placeholder={t`请输入任意钱包地址`}
+              defaultValue={props.offerId}
               onChange={(e) => {
                 setAddress(e.target.value);
               }}

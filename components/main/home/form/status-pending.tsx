@@ -9,6 +9,10 @@ import {
   Popover,
   Select,
   Tooltip,
+  Avatar,
+  Divider,
+  List,
+  Skeleton,
 } from "antd";
 import { TwitterOutlined } from "@ant-design/icons";
 import { useObserver } from "mobx-react";
@@ -26,6 +30,24 @@ import { WalletStore } from "../../../../stores/main/wallet.store";
 import { v4 as uuidv4 } from "uuid";
 import { utils } from "ethers";
 import QRCode from "qrcode";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import moment from 'moment';
+
+interface DataType {
+  gender: string;
+  name: {
+    title: string;
+    first: string;
+    last: string;
+  };
+  email: string;
+  picture: {
+    large: string;
+    medium: string;
+    thumbnail: string;
+  };
+  nat: string;
+}
 
 export const StatusPending = (props: {}) => {
   const formItemLayout = {
@@ -36,6 +58,9 @@ export const StatusPending = (props: {}) => {
   const [minting, setMinting] = useState(false);
   const [nftActiveIndex, setNftActiveIndex] = useState(solpassStore.pendingOfferIndex ? solpassStore.pendingOfferIndex : 0);
   console.log("all offers", solpassStore.allPendingOffers);
+
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<DataType[]>([]);
 
   const svgref = useRef(null);
   const svgref2 = useRef(null);
@@ -178,22 +203,22 @@ export const StatusPending = (props: {}) => {
     }
     setDownloading(false);
   };
-  const mint = async () => {
-    let dataUrl, dataUrl2;
+  const mint = async (address: string, uri: string, expDate: Date, signature: string) => {
+
     try {
-      dataUrl = await createImage(svgref);
-      dataUrl2 = await createImage(svgref2);
-      const uuid = uuidv4();
+      //dataUrl = await createImage(svgref);
+      //dataUrl2 = await createImage(svgref2);
+      /*const uuid = uuidv4();
       const msg = await walletStore.signMessage(uuid);
       const body = {
         nonce: uuid,
         signature: msg,
         id: solpassStore.pendingOffer.id,
-        imageData: dataUrl,
-        imageData2: dataUrl2,
-      };
+        //imageData: dataUrl,
+        //imageData2: dataUrl2,
+      };*/
       setMinting(true);
-      const offer = await fetch(
+      /*const offer = await fetch(
         `/api/offer-setImage?nonce=${body.nonce}&signature=${body.signature}&id=${body.id}`,
         {
           method: "POST",
@@ -211,52 +236,46 @@ export const StatusPending = (props: {}) => {
         console.log("res", res);
         if (res.Bsignature) {
           const Bsignature = res.Bsignature;
-          console.log("Bsignature", res);
-          const loading = message.loading("please wait until success...", 0);
-          try {
-            /*const blockNo = await marryStore.mint(
-              res.Aaddress,
-              res.Baddress,
-              res.Asex,
-              res.Bsex,
-              Bsignature
-            );*/
-            /*try {
-              const pairedInfo = await Marry3Contract().getPairInfo(
-                res.Aaddress
-              );
-              if (pairedInfo[0] && pairedInfo[1]) {
-                await fetch(
-                  `/api/meta/${pairedInfo[0].tokenId.toString()}.json`,
-                  {
-                    method: "GET",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                );
-                window.open(
-                  "https://twitter.com/intent/tweet?text=" +
-                  encodeURIComponent(
-                    "I just marry in web3 with my lover, and mint Paired Soubound Marry3 Certificate, https://marry3.love/i/" +
-                    pairedInfo[0].tokenId +
-                    " @marryinweb3 #marry3"
-                  )
-                );
+          console.log("Bsignature", res);*/
+      console.log("expires", expDate);
+      let formattedDate = (moment(expDate)).format('DD-MMM-YYYY');
+      console.log("formatted", formattedDate);
+      const loading = message.loading("please wait until success...", 0);
+      try {
+        const blockNo = await solpassStore.mint(address, uri, formattedDate, signature);
+        /*try {
+          const pairedInfo = await Marry3Contract().getPairInfo(
+            res.Aaddress
+          );
+          if (pairedInfo[0] && pairedInfo[1]) {
+            await fetch(
+              `/api/meta/${pairedInfo[0].tokenId.toString()}.json`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
               }
-            } catch (e) { }*/
-
-            await solpassStore.getOffer();
-          } catch (e) {
-            console.error(e);
-            message.error("mint error");
+            );
+            window.open(
+              "https://twitter.com/intent/tweet?text=" +
+              encodeURIComponent(
+                "I just marry in web3 with my lover, and mint Paired Soubound Marry3 Certificate, https://marry3.love/i/" +
+                pairedInfo[0].tokenId +
+                " @marryinweb3 #marry3"
+              )
+            );
           }
+        } catch (e) { }*/
 
-          loading();
-        } else {
-          message.error("get signature error");
-        }
+        await solpassStore.getOffer();
+      } catch (e) {
+        console.error(e);
+        message.error("mint error");
       }
+
+      loading();
+
       setMinting(false);
     } catch (e) {
       console.error(e);
@@ -265,6 +284,7 @@ export const StatusPending = (props: {}) => {
       );
     }
   };
+
   let clip: any;
   useEffect(() => {
     if (copyRef.current && inputRef.current) {
@@ -282,38 +302,103 @@ export const StatusPending = (props: {}) => {
       }
     }
   }, [copyRef.current]);
+
   useEffect(() => {
     setNftActiveIndex(solpassStore.pendingOfferIndex);
     if (solpassStore.allPendingOffers[nftActiveIndex]) {
       solpassStore.pendingOffer = solpassStore.allPendingOffers[solpassStore.pendingOfferIndex];
     }
   }, [solpassStore.pendingOfferIndex])
+
+  useEffect(() => {
+    solpassStore.getTokens();
+  }, []);
   return useObserver(() => (
     <Form {...formItemLayout} layout={"vertical"} className={styles.mainForm}>
-      <div className={styles.nfts}>
+      {solpassStore.pendingOffer.status == 1 ? (
         <div
+          id="scrollableDiv"
           style={{
-            display: "flex",
-            justifyContent: "center",
+            height: 400,
+            overflow: 'auto',
+            padding: '0 16px',
+            border: '1px solid rgba(140, 140, 140, 0.35)',
           }}
-          ref={svgref}
-          className={[
-            styles.nft,
-            nftActiveIndex == 0 ? styles.nft_active : "",
-          ].join(" ")}
         >
-          <NFT offers={solpassStore.allPendingOffers} width={340} index={nftActiveIndex} />
+          <InfiniteScroll
+            dataLength={solpassStore.pendingOffer.totalSigned}
+            next={() => { }}
+            hasMore={false}
+            loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+            scrollableTarget="scrollableDiv"
+          >
+            <List
+              dataSource={solpassStore.pendingOfferTokens}
+              renderItem={item => (
+                <List.Item key={item.id}>
+                  <List.Item.Meta
+                    //avatar={<Avatar src={item.picture.large} />}
+                    title={<a href="https://ant.design">{item.Bname}</a>}
+                    description={item.Raddress}
+                  />
+                  <Button
+                    onClick={async () => {
+                      setMinting(true);
+                      try {
+                        await mint(item.Raddress, solpassStore.pendingOffer.cover, solpassStore.pendingOffer.expirationDate, item.Bsignature);
+                      } catch (e) {
+                        console.error(e);
+                      }
+
+                      setMinting(false);
+                    }}
+                    type="primary"
+                    style={{
+                      height: "25px",
+                      width: "20%",
+                      padding: "1px",
+                      position: "absolute",
+                      left: "76%",
+                      top: "15%",
+                    }}
+                    className="shake-little"
+                    loading={minting}
+                    disabled={item.minted == 1}
+                  >
+                    {item.minted == 1 ? (<div>Minted</div>) : (<Trans id="Mint " />)}
+                  </Button>
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
         </div>
-      </div>
+      ) : (
+        <div className={styles.nfts}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+            ref={svgref}
+            className={[
+              styles.nft,
+              nftActiveIndex == 0 ? styles.nft_active : "",
+            ].join(" ")}
+          >
+            <NFT offers={solpassStore.allPendingOffers} width={340} index={nftActiveIndex} />
+          </div>
+        </div>
+
+      )}
 
       {solpassStore.pendingOffer.status == 0 ? (
         <Button
-          disabled={solpassStore.pendingOffer.status == 0}
           type="primary"
-          loading={solpassStore.pendingOffer.status == 0}
           style={{ width: "100%" }}
+          onClick={() => { solpassStore.pendingOffer.status = 1 }}
         >
-          Waiting for Receiver Signature
+          Check Receiver List: {solpassStore.pendingOffer.totalSigned - solpassStore.pendingOffer.totalMinted} receivers in queue
         </Button>
       ) : solpassStore.pendingOffer.status == 2 ? (
         <>
@@ -354,11 +439,11 @@ export const StatusPending = (props: {}) => {
         </>
       ) : (
         <>
-          <Button
+          {/* <Button
             onClick={async () => {
               setMinting(true);
               try {
-                await mint();
+
               } catch (e) {
                 console.error(e);
               }
@@ -396,6 +481,7 @@ export const StatusPending = (props: {}) => {
           >
             Revoke
           </Button>
+          */}
         </>
       )}
 
