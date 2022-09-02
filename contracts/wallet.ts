@@ -26,6 +26,12 @@ class Wallet extends EventEmitter {
   private web3Modal: Web3Modal = null;
   private ethProvider: ethers.providers.Web3Provider = null;
   private web3ModalProvider = null;
+  private _connected = false;
+
+  connected() {
+    return this._connected;
+  }
+
   init() {
     // if (!this.web3Modal) {
     this.web3Modal = new Web3Modal({
@@ -61,6 +67,7 @@ class Wallet extends EventEmitter {
     console.log("connected");
     loading();
     this.emit("connected");
+    this._connected = true;
     const network = await this.ethProvider.detectNetwork();
     console.log("network", network);
     if (network.chainId != web3Config.network.chainId) {
@@ -91,6 +98,7 @@ class Wallet extends EventEmitter {
       "disconnect",
       (error: { code: number; message: string }) => {
         console.log(error);
+        this._connected = false;
         this.emit("disconnected");
       }
     );
@@ -100,13 +108,13 @@ class Wallet extends EventEmitter {
   async restore() {
     console.log("restore");
     if (this.web3Modal.cachedProvider) {
-      return this.connect();
+      return await this.connect();
     } else {
     }
   }
   async reconnect() {
-    this.disconnect();
-    this.connect();
+    await this.disconnect();
+    await this.connect();
   }
   async disconnect() {
     await this.web3Modal.clearCachedProvider();

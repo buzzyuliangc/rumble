@@ -7,18 +7,22 @@ import BYTECODE_SOLPASS from "../abi/Solpass_bytecode.json";
 import wallet from "./wallet";
 import { Marry3, Solpass } from "../typechain-types";
 
-export function factory(abi: any, address: string) {
-  let contract;
-  wallet.on("connected", async () => {
-    const signer = await wallet.getWalletSigner();
-    const provider = await wallet.getEthProvider();
-    const Contract = new ethers.Contract(address, abi, provider);
-    contract = Contract.connect(signer);
-  });
 
-  return () => {
-    return contract;
-  };
+export async function factory(abi: any, address: string): Promise<Solpass> {
+  if (!wallet.connected()) {
+    await new Promise<void>((resolve, reject) => {
+      wallet.on("connected", async () => {
+        resolve();
+      });
+    });
+  }
+
+  const signer = await wallet.getWalletSigner();
+  const provider = await wallet.getEthProvider();
+  const Contract = new ethers.Contract(address, abi, provider);
+  const contract = Contract.connect(signer);
+
+  return contract as any as Solpass;
 }
 
 async function deploy(abi: any, bytecode: any, burnAuth: number, nftName: string, baseURI: string, signerAddr: string): Promise<Contract> {
@@ -36,15 +40,10 @@ async function deploy(abi: any, bytecode: any, burnAuth: number, nftName: string
   return deployedContract;
 }
 
-export const Marry3Contract = factory(
-  ABI_MARRY3,
-  web3Config.address.marry3
-) as () => Marry3;
+export const SolpassContract = async (address: string): Promise<Solpass> => await factory(ABI_SOLPASS, address) as any as Solpass;
 
-export const SolpassContract = factory(
-  ABI_SOLPASS,
-  "0xe88c6c94bf4acc981b7c4c0475d1a93ba45efae0"
-) as () => Solpass;
+export const Marry3Contract = undefined;
+
 
 export async function deploySolpass(burnAuth: number, nftName: string, baseURI: string, signerAddr: string): Promise<Contract> {
   return await deploy(

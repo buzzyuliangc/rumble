@@ -243,40 +243,14 @@ export const StatusPending = (props: {}) => {
       const loading = message.loading("please wait until success...", 0);
       try {
         const blockNo = await solpassStore.mint(address, uri, formattedDate, signature);
-        /*try {
-          const pairedInfo = await Marry3Contract().getPairInfo(
-            res.Aaddress
-          );
-          if (pairedInfo[0] && pairedInfo[1]) {
-            await fetch(
-              `/api/meta/${pairedInfo[0].tokenId.toString()}.json`,
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            window.open(
-              "https://twitter.com/intent/tweet?text=" +
-              encodeURIComponent(
-                "I just marry in web3 with my lover, and mint Paired Soubound Marry3 Certificate, https://marry3.love/i/" +
-                pairedInfo[0].tokenId +
-                " @marryinweb3 #marry3"
-              )
-            );
-          }
-        } catch (e) { }*/
 
+        loading();
+        setMinting(false);
         await solpassStore.getOffer();
       } catch (e) {
         console.error(e);
         message.error("mint error");
       }
-
-      loading();
-
-      setMinting(false);
     } catch (e) {
       console.error(e);
       message.error(

@@ -1,7 +1,6 @@
 import { message, Modal } from "antd";
 import { BigNumber, utils } from "ethers";
 import { action, computed, makeAutoObservable } from "mobx";
-import { Marry3Contract } from "../../contracts";
 import { deploySolpass, factory, SolpassContract } from "../../contracts";
 import wallet from "../../contracts/wallet";
 import { web3Config } from "../config";
@@ -216,21 +215,15 @@ export class SolpassStore implements IStore {
         //const walletInfo = await walletStore.getWalletInfo();
         try {
             if (this.proof) {
-                /*const solpassContract = factory(
-                    ABI_SOLPAS,
-                    web3Config.address.marry3
-                );*/
-                console.log("yes man");
-                const result = await SolpassContract()[
-                    "mint(address,string,uint256,bytes)"
+                const result = await (await SolpassContract(this.pendingOffer.contractAddr))[
+                    'mint(address,string,uint256,bytes)'
                 ](_addressB, _tokenURI, 20080808, _signatureB, {
-                    value: this.mintPrice,
+                    value: this.mintPrice
                 });
                 await result.wait();
                 console.log("mint result", result);
                 message.success("mint success");
                 this.pendingOffer.tokenId = result.toString();
-
                 this.pendingOffer.status = 2;
 
                 return result.blockNumber;
