@@ -38,9 +38,9 @@ export default function Upgrade(props) {
       const walletInfo = await wallet.getWalletInfo();
       solpassStore.info.Aaddress = walletInfo.account;
       solpassStore.info.Aname = walletInfo.ens;
-      const loading = message.loading("loading...", 0);
+      const loading = message.loading("loading...", 5);
       await solpassStore.getOffer();
-      loading();
+      loading;
     })();
 
     setInterval(solpassStore.getNowGas, 10000);
@@ -52,11 +52,11 @@ export default function Upgrade(props) {
         <div className={styles.content}>
           <MainBanner />
           <FormPage />
-          <GAS />
+          {/*<GAS />
           <Project />
           <RoadMap />
           <QA />
-          <Team />
+          <Team />*/}
         </div>
         <Footer />
       </div>

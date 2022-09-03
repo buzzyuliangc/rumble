@@ -80,6 +80,7 @@ export const Collections = (props: {}) => {
         if (total > 0) {
             solpassStore.pendingOffer = offers[index];
             solpassStore.pendingOfferIndex = index;
+            solpassStore.getTokens();
         }
         setLoading(false);
     }

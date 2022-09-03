@@ -16,35 +16,8 @@ export const FormDesc = (props: {}) => {
         solpassStore.pendingOffer.tokenId ? (
         <>
           <div className={styles.price_desc}>
-            <Trans id="查看 Marry3 Certificate 详情" />:
-            <a
-              href={`/i/${solpassStore.pendingOffer.tokenId}`}
-              target={"_blank"}
-              style={{ fontWeight: "500", marginLeft: "30px" }}
-            >
-              Token #{solpassStore.pendingOffer.tokenId}
-            </a>
-            <a
-              href={`${web3Config.opensea}${web3Config.address.solpass}/${solpassStore.pendingOffer.tokenId}`}
-              target={"_blank"}
-              style={{ fontWeight: "500", marginLeft: "10px" }}
-            >
-              <img
-                src="/opensea-logo.png"
-                style={{
-                  width: "15px",
-                  height: "15px",
-                  verticalAlign: "-3px",
-                }}
-              />
-            </a>
-            <a
-              href={`/i/${solpassStore.pendingOffer.tokenId}`}
-              target={"_blank"}
-              style={{ fontWeight: "500", marginLeft: "30px" }}
-            >
-              Token #{solpassStore.pendingOffer.tokenId}
-            </a>
+            Solpass:
+            Token #{solpassStore.pendingOffer.tokenId}
             <a
               href={`${web3Config.opensea}${solpassStore.pendingOffer.contractAddr}/${solpassStore.pendingOffer.tokenId}`}
               target={"_blank"}

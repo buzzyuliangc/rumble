@@ -32,6 +32,7 @@ import { utils } from "ethers";
 import QRCode from "qrcode";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import moment from 'moment';
+import { web3Config } from "../../../../stores/config";
 
 interface DataType {
   gender: string;
@@ -203,52 +204,24 @@ export const StatusPending = (props: {}) => {
     }
     setDownloading(false);
   };
-  const mint = async (address: string, uri: string, expDate: Date, signature: string) => {
+  const mint = async (address: string, uri: string, expDate: Date, signature: string, id: String) => {
 
     try {
-      //dataUrl = await createImage(svgref);
-      //dataUrl2 = await createImage(svgref2);
-      /*const uuid = uuidv4();
-      const msg = await walletStore.signMessage(uuid);
-      const body = {
-        nonce: uuid,
-        signature: msg,
-        id: solpassStore.pendingOffer.id,
-        //imageData: dataUrl,
-        //imageData2: dataUrl2,
-      };*/
       setMinting(true);
-      /*const offer = await fetch(
-        `/api/offer-setImage?nonce=${body.nonce}&signature=${body.signature}&id=${body.id}`,
-        {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
 
-      const res = await offer.json();
-      if (res.message) {
-        message.error(res.message);
-      } else {
-        console.log("res", res);
-        if (res.Bsignature) {
-          const Bsignature = res.Bsignature;
-          console.log("Bsignature", res);*/
       console.log("expires", expDate);
       let formattedDate = (moment(expDate)).format('DD-MMM-YYYY');
       console.log("formatted", formattedDate);
-      const loading = message.loading("please wait until success...", 0);
+      const loading = message.loading("processing, please don't leave the page...the blockchain might take a few minutes to finalize changes", 0);
       try {
-        const blockNo = await solpassStore.mint(address, uri, formattedDate, signature);
+        const blockNo = await solpassStore.mint(address, uri, formattedDate, signature, id);
 
         loading();
         setMinting(false);
         await solpassStore.getOffer();
       } catch (e) {
         console.error(e);
+        loading();
         message.error("mint error");
       }
     } catch (e) {
@@ -271,7 +244,7 @@ export const StatusPending = (props: {}) => {
           solpassStore.shareClicked = true;
         });
         clip.on("error", () => {
-          message.error("copy fail");
+          message.error("copy failed");
         });
       }
     }
@@ -313,14 +286,16 @@ export const StatusPending = (props: {}) => {
                 <List.Item key={item.id}>
                   <List.Item.Meta
                     //avatar={<Avatar src={item.picture.large} />}
-                    title={<a href="https://ant.design">{item.Bname}</a>}
+                    title={<a
+                      href={`${web3Config.scan}${item.Raddress}`}
+                    >{item.Bname}</a>}
                     description={item.Raddress}
                   />
                   <Button
                     onClick={async () => {
                       setMinting(true);
                       try {
-                        await mint(item.Raddress, solpassStore.pendingOffer.cover, solpassStore.pendingOffer.expirationDate, item.Bsignature);
+                        await mint(item.Raddress, solpassStore.pendingOffer.cover, solpassStore.pendingOffer.expirationDate, item.Bsignature, item.id);
                       } catch (e) {
                         console.error(e);
                       }
@@ -332,9 +307,9 @@ export const StatusPending = (props: {}) => {
                       height: "25px",
                       width: "20%",
                       padding: "1px",
-                      position: "absolute",
-                      left: "76%",
-                      top: "15%",
+                      position: "relative",
+                      right: "2px",
+                      top: "-13px",
                     }}
                     className="shake-little"
                     loading={minting}
@@ -372,7 +347,7 @@ export const StatusPending = (props: {}) => {
           style={{ width: "100%" }}
           onClick={() => { solpassStore.pendingOffer.status = 1 }}
         >
-          Check Receiver List: {solpassStore.pendingOffer.totalSigned - solpassStore.pendingOffer.totalMinted} receivers in queue
+          {solpassStore.pendingOffer.totalSigned} total receivers: {solpassStore.pendingOffer.totalSigned - solpassStore.pendingOffer.totalMinted} waiting to be minted
         </Button>
       ) : solpassStore.pendingOffer.status == 2 ? (
         <>
@@ -380,8 +355,9 @@ export const StatusPending = (props: {}) => {
             style={{ width: "calc(100% - 70px)" }}
             onClick={download}
             loading={downloading}
+            disabled={true}
           >
-            <Trans id=" Minted, Click to Download PNG " />
+            <Trans id=" Minted! " />
           </Button>
           <a
             style={{
@@ -399,9 +375,7 @@ export const StatusPending = (props: {}) => {
             href={
               "https://twitter.com/intent/tweet?text=" +
               encodeURIComponent(
-                "I just marry in web3 with my lover, and mint Paired Soubound Marry3 Certificate, https://marry3.love/i/" +
-                solpassStore.pendingOffer.tokenId +
-                " @marryinweb3 #marry3"
+                "I just minted a Solpass @Rumble #Rumble #Solpass"
               )
             }
             target={"_blank"}
@@ -514,7 +488,10 @@ export const StatusPending = (props: {}) => {
             }
             target={"_blank"}
           >
-            <Popover
+            <TwitterOutlined
+              style={{ fontSize: "18px", color: "#0057D6", width: "40px", height: "40px" }}
+            />
+            {/*<Popover
               placement="right"
               content={
                 <div style={{ width: "180px" }}>
@@ -527,7 +504,7 @@ export const StatusPending = (props: {}) => {
               <TwitterOutlined
                 style={{ fontSize: "18px", color: "#0057D6", width: "40px", height: "40px" }}
               />
-            </Popover>
+            </Popover>*/}
           </a>
         </Input.Group>
       ) : null}

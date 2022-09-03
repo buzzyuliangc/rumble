@@ -8,6 +8,7 @@ import styles from "./footer.module.less";
 import { Image, Upload, Typography } from 'antd';
 import { HeartFilled, PicCenterOutlined } from "@ant-design/icons";
 import { content } from "html2canvas/dist/types/css/property-descriptors/content";
+import { web3Config } from "../../../stores/config";
 
 const { Title, Paragraph, Text, Link } = Typography;
 
@@ -76,43 +77,73 @@ export const NFT = (props: {
           src={coverA}
         />
       </div>
-      {/*<Upload
-        name="cover-buzz"
-        listType="picture-card"
-        className="cover-buzz "
-        showUploadList={false}
-        disabled={true}
+
+      <div
+        className="textparagrah"
         style={{
-          background: "#fff",
-          width: (250 * 100) / 1080 + "%",
-          height: (250 * 100) / 1080 + "%",
-          left: (600 * 100) / 1080 + "%",
-          top: (640 * 100) / 1080 + "%",
+          width: "30%",
+          height: "70%",
+          left: "60%",
+          top: "15%",
           position: "absolute",
           zIndex: 20,
         }}
       >
-        <img src={coverA}
-          alt="avatar"
-          style={{
-            width: '100%',
-          }}
-        />
-        </Upload>*/}
+        <div>
+          <h1
+            className="sc-1xf18x6-0 jjFMnV item--title"
+            title="Spaceface"
+            style={{
+              fontSize: "19px",
+              fontWeight: "600",
+              maxWidth: "100%",
+              margin: "0px",
+              width: "588px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              lineHeight: "normal",
+              whiteSpace: 'nowrap',
+            }}>
+            {props.offers?.at(props.index).nftName}
+          </h1>
+        </div>
 
-      {/*<img
-        className="cover"
-        style={{
-          width: "30%",
-          height: "30%",
-          "objectFit": "cover",
-          right: 0,
-          bottom: 0,
-          position: "absolute",
-          zIndex: 100,
-        }}
-        src={coverA}
-      />*/}
+        <div
+          className="sc-1xf18x6-0 sc-4gdciy-1 haVRLx gmetdQ AccountLink--ellipsis-overflow"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            height: "24px",
+            width: "100%",
+            fontSize: "10px",
+          }}>
+          Issued by&nbsp;
+          <a
+            className="sc-1pie21o-0 hmVtez sc-1xf18x6-0 jQBTGb AccountLink--ellipsis-overflow"
+            font-weight="inherit"
+            href={`${web3Config.scan}${props.offers?.at(props.index).Aaddress}`}
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}>
+            <span>{props.offers?.at(props.index).Aname}</span>
+          </a>
+        </div>
+
+        <div style={{
+          width: "100%",
+        }}>
+          <p style={{
+            fontSize: "10px",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            width: "100%",
+          }}>
+            Description: {props.offers?.at(props.index).Acomment}
+          </p>
+        </div>
+      </div>
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -307,20 +338,7 @@ export const NFT = (props: {
             />
 
             <g opacity="1" transform="translate(0 0)  rotate(0 540 480)">
-              {/* <g
-                id="Bg shape"
-                filter="url(#filter_13)"
-                // style={{ opacity: 0.5 }}
-              >
-                <path
-                  id="Bg shape"
-                  fillRule="evenodd"
-                  fill="url(#linear_0)"
-                  transform="translate(30 30)  rotate(0 510 450)"
-                  opacity="1"
-                  d="M0,900L675,900C865.54,900 1020,745.54 1020,555L1020,0L0,0L0,900Z "
-                />
-              </g> */}
+
               <g opacity="1" transform="translate(100 755)  rotate(0 138.5 56)">
                 <g opacity="1" transform="translate(0 0)  rotate(0 138.5 16)">
                   <g opacity="1" transform="translate(0 0)  rotate(0 61.5 16)">
@@ -547,76 +565,6 @@ export const NFT = (props: {
                   </g>
                 ) : null}
               </g>
-              <g id="" filter="url(#filter_44)">
-                <g opacity="1" transform="translate(410 172)  rotate(0 297 53)">
-                  <text>
-                    <tspan
-                      x="10"
-                      y="80"
-                      fontSize="70"
-                      line-height="0"
-                      fill="#361041"
-                      opacity="1"
-                      letterSpacing="0"
-                    >
-
-                      {props.offers?.at(props.index).nftName}
-
-                    </tspan>
-                  </text>
-                </g>
-              </g>
-              <g
-                opacity="1"
-                transform="translate(410 278)  rotate(0 120.5 63.5)"
-              >
-                <text>
-                  <tspan
-                    x="0"
-                    y="96"
-                    fontSize="30"
-                    line-height="0"
-                    fill="#DDDDDD"
-                    opacity="1"
-                    letterSpacing="0"
-                  >
-                    Issued by {props.offers?.at(props.index).Aname}
-                  </tspan>
-                </text>
-              </g>
-              <g id="" filter="url(#filter_48)">
-                <g opacity="1" transform="translate(410 427)  rotate(0 191 53)">
-                  <text>
-                    <tspan
-                      x="0"
-                      y="80"
-                      fontSize="30"
-                      line-height="0"
-                      fill="#361041"
-                      opacity="1"
-                      letterSpacing="0"
-                    >
-                      Description: {props.offers?.at(props.index).Acomment}
-                    </tspan>
-                  </text>
-                </g>
-              </g>
-              <path
-                id="Rectangle 242"
-                fillRule="evenodd"
-                style={{ fill: "url(#pattern1)" }}
-                transform="translate(90 340)  rotate(0 125 125)"
-                opacity="1"
-                d="M125,250L125,250C158.15,250 189.95,236.83 213.39,213.39C236.83,189.95 250,158.15 250,125L250,0L0,0L0,125C0,158.15 13.17,189.95 36.61,213.39C60.05,236.83 91.85,250 125,250Z "
-              />
-              <path
-                id="Rectangle 243"
-                fillRule="evenodd"
-                style={{ fill: "url(#pattern2)" }}
-                transform="translate(90 90)  rotate(0 125 125)"
-                opacity="1"
-                d="M0,250L250,250L250,125C250,91.85 236.83,60.05 213.39,36.61C189.95,13.17 158.15,0 125,0L125,0C91.85,0 60.05,13.17 36.61,36.61C13.17,60.05 0,91.85 0,125L0,250Z "
-              />
             </g>
             <g
               opacity="1"
@@ -694,6 +642,6 @@ export const NFT = (props: {
           </g>
         </g>
       </svg>
-    </div>
+    </div >
   ));
 };

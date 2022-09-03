@@ -163,16 +163,22 @@ export class SolpassStore implements IStore {
             }
         }
         const msg = await walletStore.signMessage(uuid);
+        const pleasePay = message.loading("Offer signed, please continue to pay on your wallet prompt", 10);
         const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
         if (!result) {
+            pleasePay();
             message.error('Deployment failed, please make sure your wallet is connected and try again');
             return;
-        }
+        };
         if (!result.address) {
+            pleasePay();
             message.error("Deployment failed, please make sure your wallet is connected and try again");
             return;
-        }
-        await result.wait();
+        };
+        pleasePay();
+        const loading = message.loading("transaction processing...the blockchain might take a few minutes to finalize changes", 15);
+        await result.deployTransaction.wait();
+        loading();
         message.success("Solpass Contract Deployed");
         body.signature = msg;
         body.contractAddr = result.address;
@@ -211,19 +217,86 @@ export class SolpassStore implements IStore {
         _tokenURI: string,
         _expDate: string,
         _signatureB: string,
+        _id: String,
     ) {
         //const walletInfo = await walletStore.getWalletInfo();
         try {
+            const contractAddr = this.pendingOffer.contractAddr;
             if (this.proof) {
-                const result = await (await SolpassContract(this.pendingOffer.contractAddr))[
+                const body = {
+                    id: _id,
+                    action: 0,
+                };
+                const resp = await fetch("/api/check-minted", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(body),
+                });
+                const minted = await resp.json();
+                if (minted.message) {
+                    message.error("api error", minted.message);
+                    console.log(minted.message);
+                    return;
+                }
+                if (minted != 0) {
+                    message.error("This pass is already minted");
+                    return;
+                }
+                const result = await (await SolpassContract(contractAddr))[
                     'mint(address,string,uint256,bytes)'
                 ](_addressB, _tokenURI, 20080808, _signatureB, {
                     value: this.mintPrice
                 });
+                const body1 = {
+                    id: _id,
+                    action: 1,
+                };
+
                 await result.wait();
                 console.log("mint result", result);
                 message.success("mint success");
-                this.pendingOffer.tokenId = result.toString();
+                const tokenAmount = await (await SolpassContract(contractAddr)).balanceOf(_addressB);
+                //check out of bound to avoid exception
+                if (tokenAmount.toNumber() - 1 < 0) {
+                    message.error("Something went wrong, please refresh and try again");
+                    console.log("tokenid out of bound");
+                    return;
+                }
+                const tokenId = await (await SolpassContract(contractAddr)).tokenOfOwnerByIndex(_addressB, tokenAmount.toNumber() - 1);
+                console.log("tokenid", tokenId);
+                this.pendingOffer.tokenId = tokenId.toString();
+                const body2 = {
+                    id: _id,
+                    action: 2,
+                    tokenId: tokenId,
+                };
+                const resp2 = await fetch("/api/check-minted", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(body2),
+                });
+                console.log("what");
+                const apiresp2 = await resp2.json();
+                if (apiresp2.message) {
+                    console.log(apiresp2.message);
+                    message.error("api error", apiresp2.message);
+                }
+                const resp1 = await fetch("/api/check-minted", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(body1),
+                });
+                const apiresp = await resp1.json();
+                if (apiresp.message) {
+                    message.error("api error", apiresp.message);
+                    console.log(apiresp.message);
+                }
                 this.pendingOffer.status = 2;
 
                 return result.blockNumber;
