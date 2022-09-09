@@ -55,6 +55,8 @@ model Contract {
     Iaddress   String
     nftName    String
     burnAuth   Int 
+    createdAt DateTime @default(now())
+    updatedAt  DateTime  @updatedAt
 }
 
 model Token {
@@ -67,5 +69,6 @@ model Token {
     Raddress  String
     Caddress  String
     createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
     minted    Int      @default(0)
 }
