@@ -34,6 +34,9 @@ model Offers {
     Acover     String?
     Bcover     String?
     cover      String?
+    coverArw   String?
+    metaIPFS   String?
+    metaArw    String?
     imageData  String?
     imageDataB String?
     bgIndex    Int?

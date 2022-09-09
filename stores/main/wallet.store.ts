@@ -38,7 +38,7 @@ export class WalletStore implements IStore {
       });
     });
   }
-  // 获取钱包余额详情
+
   async getAccountWalletInfo() {
     console.log("getAccountWalletInfo");
     const walletInfo: IWallet = { status: "disconnected" };
@@ -71,7 +71,7 @@ export class WalletStore implements IStore {
       // wallet.reconnect();
     }
   }
-  // 连接
+
   @action
   private setWalletInfo(walletInfo: IWallet) {
     console.log("setWalletInfo", walletInfo);

@@ -13,6 +13,18 @@ import moment from "moment";
 import { randomBytes } from "crypto";
 
 const walletStore = useStore(WalletStore);
+const projectId = '2DdOfhpepWwdoHOxnzi9eMjTJ36';
+const projectSecret = '89a6f73c724ef744a90bb9ffc3a43e6a';
+const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+const client = ipfsHttpClient({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    apiPath: '/api/v0',
+    headers: {
+        authorization: auth
+    }
+});
 
 export type Offers = {
     id?: string;
@@ -30,6 +42,8 @@ export type Offers = {
     tokenId?: string | null;
     Acomment?: string | null;
     cover?: string | null;
+    metaIPFS?: string | null;
+    metaArw?: string | null;
     inviteLink?: string | null;
     bgIndex?: number | null;
     mintedAt?: Date | null;
@@ -165,6 +179,16 @@ export class SolpassStore implements IStore {
         const msg = await walletStore.signMessage(uuid);
         const pleasePay = message.loading("Offer signed, please continue to pay on your wallet prompt", 10);
         const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
+        const metaData = {
+            "description": body.Acomment,
+            "external_url": "https://openseacreatures.io/3",
+            "image": `https://rumble.infura-ipfs.io/ipfs/${body.cover}`,
+            "name": body.nftName,
+            "attributes": [{
+                "trait_type": "Base",
+                "value": "Starfish"
+            },],
+        }
         if (!result) {
             pleasePay();
             message.error('Deployment failed, please make sure your wallet is connected and try again');
@@ -509,4 +533,8 @@ export class SolpassStore implements IStore {
             }
         );
     }
+}
+
+function ipfsHttpClient(arg0: { host: string; port: number; protocol: string; apiPath: string; headers: { authorization: any; }; }) {
+    throw new Error("Function not implemented.");
 }

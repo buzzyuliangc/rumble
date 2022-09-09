@@ -63,7 +63,7 @@ export const Status0 = (props: {}) => {
     headers: {
       authorization: auth
     }
-  })
+  });
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -130,12 +130,15 @@ export const Status0 = (props: {}) => {
     const file = event.file
     if (typeof file !== 'undefined') {
       try {
-        const result = await client.add(file)
-        console.log(result)
-        solpassStore.info.cover = result.path
-        setImageUrl(`https://rumble.infura-ipfs.io/ipfs/${result.path}`)
-        console.log('sol expiration', solpassStore.info.expirationDate);
-        console.log('sol burnAuth', solpassStore.info.burnAuth);
+        const result = await client.add(file);
+        console.log(result);
+        solpassStore.info.cover = result.path;
+        setImageUrl(`https://rumble.infura-ipfs.io/ipfs/${result.path}`);
+        //const coverArw = await fetch(
+        //  `https://ipfs2arweave.com/permapin/${result.path}`,
+        //  { method: 'POST' });
+        //const response = await coverArw.json();
+        //console.log("arweave response", response);
       } catch (error) {
         console.log("ipfs image upload error: ", error)
       }

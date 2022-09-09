@@ -29,6 +29,9 @@ import {
   DownOutlined,
 } from "@ant-design/icons";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
+import { NFT } from "../../components/main/common/nft";
+import { web3Config } from "../../stores/config";
+import React from "react";
 
 export default function Offer(props) {
   const offerStore = useStore(OfferStore);
@@ -126,21 +129,33 @@ export default function Offer(props) {
             <div className={styles.Page1}>
               <div className={styles.Page_inner}>
                 <Header hideAll={true} />
-                <h1 className={styles.title}>{offerStore.offer.Acomment}</h1>
+                <h1 className={styles.title}>{offerStore.offer.nftName}</h1>
                 <h2 className={styles.subInfo}>
+                  <a
+                    className="sc-1pie21o-0 hmVtez sc-1xf18x6-0 jQBTGb AccountLink--ellipsis-overflow"
+                    font-weight="inherit"
+                    href={`${web3Config.scan}${offerStore.offer.Aaddress}`}
+                  >
+                    <h2>
+                      {offerStore.offer.Aname} ({offerStore.offer.Aaddress
+                        ? offerStore.offer.Aaddress.substr(0, 6) +
+                        "..." +
+                        offerStore.offer.Aaddress.substr(
+                          offerStore.offer.Aaddress.length - 4, 4)
+                        : ""})
+                    </h2>
+                  </a>
                   <p>
-                    <Trans id="一份来自 " />
-                    {offerStore.offer.Aname}
-                    <Trans id=" 对你爱的承诺。" />
+                    invited you to mint this Solpass
                   </p>
                   <p>
-                    <Trans id="如果你答应他的，这份情书将被永久性刻在区块链上。" />
+                    The Solpass is immutable after issuance
                   </p>
                   <p>
-                    <Trans id="同时，你们俩将分别收到预示今生永恒的NFT。" />
+                    Your signed consent will be sent to the issuer
                   </p>
                   <p>
-                    <Trans id="现在，你需要做的就是签名赶紧让他知道。" />
+                    After issuing, your new identity will be stored on the blockchain
                   </p>
                 </h2>
                 <h2 className={styles.subInfo2}>
@@ -162,11 +177,18 @@ export default function Offer(props) {
                   </p>
                 </h2>
                 <div className={styles.right}>
-                  <img
-                    src="/heart_xin.png"
-                    className={styles.xin}
-                    title="xin"
-                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+
+                    className={[
+                      styles.nft,
+                    ].join(" ")}
+                  >
+                    <NFT offers={[offerStore.offer]} width={340} index={0} />
+                  </div>
                   <Form layout={"vertical"} className={styles.mainForm}>
                     <Form.Item label={t`your name`}>
                       <Input.Group

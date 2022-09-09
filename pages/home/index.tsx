@@ -27,12 +27,12 @@ import { SolpassStore } from "../../stores/main/solpass.store";
 
 export default function Upgrade(props) {
   const wallet = useStore(WalletStore);
-  const nftStore = useStore(NFTStore);
+  //const nftStore = useStore(NFTStore);
 
   const solpassStore = useStore(SolpassStore);
 
   useEffect(() => {
-    nftStore.getNFTS();
+    //nftStore.getNFTS();
     solpassStore.getMintInfo();
     (async () => {
       const walletInfo = await wallet.getWalletInfo();

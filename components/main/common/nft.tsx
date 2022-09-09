@@ -102,7 +102,10 @@ export const NFT = (props: {
               overflow: "hidden",
               textOverflow: "ellipsis",
               lineHeight: "normal",
-              whiteSpace: 'nowrap',
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+              wordBreak: "break-word",
+              height: '30px',
             }}>
             {props.offers?.at(props.index).nftName}
           </h1>
@@ -116,29 +119,31 @@ export const NFT = (props: {
             height: "24px",
             width: "100%",
             fontSize: "10px",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
           }}>
           Issued by&nbsp;
           <a
             className="sc-1pie21o-0 hmVtez sc-1xf18x6-0 jQBTGb AccountLink--ellipsis-overflow"
             font-weight="inherit"
             href={`${web3Config.scan}${props.offers?.at(props.index).Aaddress}`}
-            style={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-            }}>
+          >
             <span>{props.offers?.at(props.index).Aname}</span>
           </a>
         </div>
 
         <div style={{
           width: "100%",
+          fontSize: "10px",
+          textOverflow: "ellipsis",
+          wordWrap: "break-word",
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+          overflow: "hidden",
+          height: "70px",
         }}>
           <p style={{
-            fontSize: "10px",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            width: "100%",
+
           }}>
             Description: {props.offers?.at(props.index).Acomment}
           </p>

@@ -17,6 +17,7 @@ export type Offers = {
   Baddress?: string;
   Asignature?: string;
   Bsignature?: string | null;
+  nftName?: string | null;
   Aname?: string | null;
   Bname?: string | null;
   status?: number;
