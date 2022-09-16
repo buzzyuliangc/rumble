@@ -295,7 +295,7 @@ export const StatusPending = (props: {}) => {
                     onClick={async () => {
                       setMinting(true);
                       try {
-                        await mint(item.Raddress, solpassStore.pendingOffer.cover, solpassStore.pendingOffer.expirationDate, item.Bsignature, item.id);
+                        await mint(item.Raddress, solpassStore.pendingOffer.metaIPFS, solpassStore.pendingOffer.expirationDate, item.Bsignature, item.id);
                       } catch (e) {
                         console.error(e);
                       }

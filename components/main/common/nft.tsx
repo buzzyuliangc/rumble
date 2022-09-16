@@ -19,13 +19,11 @@ export const NFT = (props: {
 }) => {
   const svgref = useRef(null);
 
-  const bgImage = props.offers?.at(props.index).bgIndex
-    ? `url(${window.location.origin}/bg/${props.offers?.at(props.index).bgIndex}.png)`
-    : `url(${window.location.origin}/bg/1.png)`;
+  const bgImage = `url(${window.location.origin}/bg/1.png)`;
 
   const coverA = props.offers?.at(props.index).cover
     ? `https://rumble.infura-ipfs.io/ipfs/${props.offers?.at(props.index).cover}` // `/api/proxy?url=${encodeURIComponent(props.offer?.Acover)}`
-    : "/heart-cover.png";
+    : "/blue_spark.png";
 
   useEffect(() => {
     const css = document.createElement("style");

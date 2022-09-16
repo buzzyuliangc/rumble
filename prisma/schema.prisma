@@ -68,7 +68,16 @@ model Token {
     Iaddress  String
     Raddress  String
     Caddress  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    minted    Int      @default(0)
+    burnAuth   Int?     @default(0)
+    nftName    String?
+    Aname      String?
+    expirationDate DateTime?
+    Acomment   String?
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    minted     Int      @default(0)
+    cover      String?
+    coverArw   String?
+    metaIPFS   String?
+    metaArw    String?
 }

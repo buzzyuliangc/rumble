@@ -25,11 +25,13 @@ import { Offers } from "../../stores/main/solpass.store";
 import moment from "moment";
 import { web3Config } from "../../stores/config";
 import { Footer } from "../../components/main/common/footer.com";
+import wallet from "../../contracts/wallet";
 
 export default function Offer(props: {
   offerId?: number;
 }) {
   const walletStore = useStore(WalletStore);
+
 
   const router = useRouter();
   const { id } = router.query;
@@ -40,68 +42,58 @@ export default function Offer(props: {
 
   const columns: any = [
     {
-      title: t`交互双方`,
+      title: 'Solpass Address',
       dataIndex: "address",
       key: "address",
       render: (_, record) => {
         return (
           <span>
             <a
-              href={`${web3Config.scan}${record.Aaddress}`}
+              href={`${web3Config.scan}${record.Caddress}`}
               target="_blank"
               style={{ color: "#171C26" }}
             >
-              {record.Aaddress}
+              {record.Bname}:{record.Caddress}
             </a>
             <br />
-            <a
-              href={`${web3Config.scan}${record.Baddress}`}
-              target="_blank"
-              style={{ color: "#687182" }}
-            >
-              {record.Baddress}
-            </a>
           </span>
         );
       },
     },
     {
-      title: t`交互行为`,
-      dataIndex: "action",
-      key: "action",
+      title: 'Solpass',
+      dataIndex: "card",
+      key: "card",
       render: (_, record) => {
-        return <Tag color={"#F41870"}>Married</Tag>;
+        return <Tag color={"#F41870"}>{record.minted ? "minted" : "pending"}</Tag>;
       },
     },
     {
-      title: t`编号`,
+      title: "Token ID",
       dataIndex: "look",
       key: "look",
       render: (_, record) => {
         return (
           <span>
-            <a href={`/i/${record.AtokenId}`} target="_blank">
-              Token #{record.AtokenId}
+            <a href={`${web3Config.opensea}${record.Caddress}/${record.tokenId}`} target="_blank">
+              Token #{record.tokenId}
             </a>
             <br />
-            <a href={`/i/${record.BtokenId}`} target="_blank">
-              Token #{record.BtokenId}
-            </a>
           </span>
         );
       },
     },
     {
-      title: t`时间`,
-      dataIndex: "updateAt",
-      key: "updateAt",
+      title: 'Expiration Date',
+      dataIndex: "expiresAt",
+      key: "expiresAt",
       render: (_, record) => {
         return (
           <div>
-            {moment(record.mintedAt).fromNow()}
+
             <br />
             <span style={{ color: "#687182" }}>
-              {moment(record.mintedAt).toLocaleString()}
+
             </span>
           </div>
         );
@@ -129,8 +121,14 @@ export default function Offer(props: {
     loading();
   }
   useEffect(() => {
-    getOffers();
-  }, [router.query.id]);
+    (async () => {
+      const walletInfo = await walletStore.getWalletInfo();
+      const loading = message.loading("loading...", 5);
+      getOffers(walletInfo.account);
+      console.log(walletInfo.account);
+      loading;
+    })();
+  }, []);
 
   return useObserver(() => (
     <div className={styles.upgrade}>

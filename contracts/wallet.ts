@@ -104,7 +104,7 @@ class Wallet extends EventEmitter {
     );
     return this.ethProvider;
   }
-  // 恢复
+
   async restore() {
     console.log("restore");
     if (this.web3Modal.cachedProvider) {

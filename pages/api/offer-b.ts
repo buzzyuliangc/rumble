@@ -67,6 +67,13 @@ const handler: NextApiHandler = async (req, res) => {
         Iaddress: result.Aaddress,
         Raddress: data.Baddress,
         Caddress: result.contractAddr,
+        burnAuth: result.burnAuth,
+        nftName: result.nftName,
+        Aname: result.Aname,
+        expirationDate: result.expirationDate,
+        Acomment: result.Acomment,
+        cover: result.cover,
+        metaIPFS: result.metaIPFS,
       }
 
 

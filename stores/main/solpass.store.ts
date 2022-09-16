@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import qs from "qs";
 import moment from "moment";
 import { randomBytes } from "crypto";
+import { create as ipfsHttpClient } from 'ipfs-http-client';
 
 const walletStore = useStore(WalletStore);
 const projectId = '2DdOfhpepWwdoHOxnzi9eMjTJ36';
@@ -130,7 +131,7 @@ export class SolpassStore implements IStore {
     async signA() {
         //generates random uuid
         const uuid = uuidv4();
-        const baseURI = "https://ipfs.infura.io/ipfs/";
+        const baseURI = "https://rumble.infura-ipfs.io/ipfs/";
 
         const body = {
             nonce: uuid,
@@ -143,6 +144,7 @@ export class SolpassStore implements IStore {
             nftName: this.info.nftName,
             expirationDate: this.info.expirationDate,
             contractAddr: "",
+            metaIPFS: "",
         };
         if (!body.cover) {
             message.error("solpass cover empty");
@@ -178,10 +180,9 @@ export class SolpassStore implements IStore {
         }
         const msg = await walletStore.signMessage(uuid);
         const pleasePay = message.loading("Offer signed, please continue to pay on your wallet prompt", 10);
-        const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
         const metaData = {
             "description": body.Acomment,
-            "external_url": "https://openseacreatures.io/3",
+            "external_url": "",
             "image": `https://rumble.infura-ipfs.io/ipfs/${body.cover}`,
             "name": body.nftName,
             "attributes": [{
@@ -189,6 +190,10 @@ export class SolpassStore implements IStore {
                 "value": "Starfish"
             },],
         }
+
+        const ipfsResponse = await client.add(JSON.stringify(metaData));
+        body.metaIPFS = ipfsResponse.path;
+        const result = await deploySolpass(body.burnAuth, body.nftName, baseURI, body.Aaddress);
         if (!result) {
             pleasePay();
             message.error('Deployment failed, please make sure your wallet is connected and try again');
@@ -294,7 +299,7 @@ export class SolpassStore implements IStore {
                 const body2 = {
                     id: _id,
                     action: 2,
-                    tokenId: tokenId,
+                    tokenId: tokenId.toString(),
                 };
                 const resp2 = await fetch("/api/check-minted", {
                     method: "POST",
@@ -303,7 +308,6 @@ export class SolpassStore implements IStore {
                     },
                     body: JSON.stringify(body2),
                 });
-                console.log("what");
                 const apiresp2 = await resp2.json();
                 if (apiresp2.message) {
                     console.log(apiresp2.message);
@@ -535,6 +539,4 @@ export class SolpassStore implements IStore {
     }
 }
 
-function ipfsHttpClient(arg0: { host: string; port: number; protocol: string; apiPath: string; headers: { authorization: any; }; }) {
-    throw new Error("Function not implemented.");
-}
+

@@ -6,9 +6,9 @@ export const Banner = (props: { onclick: () => void }) => {
   return (
     <div className={styles.banner}>
       <div className={styles.banner_inner}>
-        <img src="/heart_xin.png" className={styles.heart} />
+        <img src="/blue_lightning.png" className={styles.heart} />
         <span className={styles.text}>
-          <Trans id="您有一封来自另一个地址的甜蜜请求，请回应" />
+          You have received an Solpass invitation
         </span>
       </div>
       <svg

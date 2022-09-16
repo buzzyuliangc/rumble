@@ -54,6 +54,7 @@ const handler: NextApiHandler = async (req, res) => {
         expirationDate: req.body.expirationDate,
         contractId: "",
         contractAddr: req.body.contractAddr.toLowerCase(),
+        metaIPFS: req.body.metaIPFS,
       };
       if (!prismaOffers.cover) {
         return res.status(400).json({

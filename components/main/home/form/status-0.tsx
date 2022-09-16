@@ -34,6 +34,7 @@ import { SolpassStore } from "../../../../stores/main/solpass.store";
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import moment from "moment";
+import { kMaxLength } from "buffer";
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -260,6 +261,7 @@ export const Status0 = (props: {}) => {
         >
           <Input
             value={solpassStore.info.Aname}
+            maxLength={5}
             placeholder="will get your .eth/.bit name auto"
             onChange={async (e) => {
               solpassStore.info.Aname = e.target.value;
@@ -279,6 +281,7 @@ export const Status0 = (props: {}) => {
           placeholder='Name your pass'
           value={solpassStore.info.nftName}
           style={{ width: "calc(100% - 120px)" }}
+          maxLength={9}
           onChange={(e) => {
             solpassStore.info.nftName = e.target.value;
           }}
@@ -289,6 +292,8 @@ export const Status0 = (props: {}) => {
           placeholder='This pass is used for...'
           rows={5}
           value={solpassStore.info.Acomment}
+          maxLength={20}
+          showCount={true}
           onChange={(e) => {
             solpassStore.info.Acomment = e.target.value;
           }}
