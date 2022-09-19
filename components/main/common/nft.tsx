@@ -9,6 +9,7 @@ import { Image, Upload, Typography } from 'antd';
 import { HeartFilled, PicCenterOutlined } from "@ant-design/icons";
 import { content } from "html2canvas/dist/types/css/property-descriptors/content";
 import { web3Config } from "../../../stores/config";
+import useFitText from "use-fit-text"
 
 const { Title, Paragraph, Text, Link } = Typography;
 
@@ -19,6 +20,7 @@ export const NFT = (props: {
 }) => {
   const svgref = useRef(null);
 
+  const { fontSize, ref } = useFitText();
   const bgImage = `url(${window.location.origin}/bg/1.png)`;
 
   const coverA = props.offers?.at(props.index).cover
@@ -89,20 +91,12 @@ export const NFT = (props: {
       >
         <div>
           <h1
-            className="sc-1xf18x6-0 jjFMnV item--title"
+            ref={ref}
             title="Spaceface"
             style={{
-              fontSize: "19px",
-              fontWeight: "600",
+              fontSize,
               maxWidth: "100%",
-              margin: "0px",
               width: "588px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              lineHeight: "normal",
-              whiteSpace: 'pre-wrap',
-              wordWrap: 'break-word',
-              wordBreak: "break-word",
               height: '30px',
             }}>
             {props.offers?.at(props.index).nftName}
@@ -110,39 +104,31 @@ export const NFT = (props: {
         </div>
 
         <div
-          className="sc-1xf18x6-0 sc-4gdciy-1 haVRLx gmetdQ AccountLink--ellipsis-overflow"
+          ref={ref}
           style={{
             display: "inline-flex",
             alignItems: "center",
-            height: "24px",
+            height: "28px",
             width: "100%",
-            fontSize: "10px",
-            textOverflow: "ellipsis",
+            fontSize,
             overflow: "hidden",
           }}>
-          Issued by&nbsp;
+          <div>
+            Issued by
+          </div>
           <a
-            className="sc-1pie21o-0 hmVtez sc-1xf18x6-0 jQBTGb AccountLink--ellipsis-overflow"
-            font-weight="inherit"
             href={`${web3Config.scan}${props.offers?.at(props.index).Aaddress}`}
           >
             <span>{props.offers?.at(props.index).Aname}</span>
           </a>
         </div>
 
-        <div style={{
-          width: "100%",
-          fontSize: "10px",
-          textOverflow: "ellipsis",
-          wordWrap: "break-word",
-          whiteSpace: "pre-wrap",
-          wordBreak: "break-word",
-          overflow: "hidden",
-          height: "70px",
+        <div ref={ref} style={{
+          fontSize,
+          height: "100px",
+          width: "100%"
         }}>
-          <p style={{
-
-          }}>
+          <p>
             Description: {props.offers?.at(props.index).Acomment}
           </p>
         </div>

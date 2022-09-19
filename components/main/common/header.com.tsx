@@ -91,11 +91,6 @@ export const Header = (props: {
             <span style={{ fontSize: "10px", marginLeft: "5px" }}>↗</span>
           ) : null}
         </a>
-        <span>
-          <a href="/divorce" title='Burn SBT'>
-            Burn SBT
-          </a>
-        </span>
       </div>
       <div className={styles.right}>
         <img

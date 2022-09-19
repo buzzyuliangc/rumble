@@ -62,6 +62,7 @@
     "social-post-api": "^1.0.20",
     "styled-components": "^5.1.18",
     "typescript": "^4.3.2",
+    "use-fit-text": "^2.4.0",
     "uuid": "^8.3.2",
     "web3modal": "^1.9.4",
     "webhook-discord": "^3.7.8"

@@ -42,6 +42,37 @@ export default function Offer(props: {
 
   const columns: any = [
     {
+      title: 'Solpass Name',
+      dataIndex: "name",
+      key: "name",
+      render: (_, record) => {
+        return (
+          <span>
+            {record.nftName}
+          </span>
+        );
+      },
+    },
+    {
+      title: 'Issuer',
+      dataIndex: "issuer",
+      key: "issuer",
+      render: (_, record) => {
+        return (
+          <span>
+            <a
+              href={`${web3Config.scan}${record.Iaddress}`}
+              target="_blank"
+              style={{ color: "#F41870" }}
+            >
+              {record.Aname}
+            </a>
+            <br />
+          </span>
+        );
+      },
+    },
+    {
       title: 'Solpass Address',
       dataIndex: "address",
       key: "address",
@@ -51,9 +82,9 @@ export default function Offer(props: {
             <a
               href={`${web3Config.scan}${record.Caddress}`}
               target="_blank"
-              style={{ color: "#171C26" }}
+              style={{ color: "#F41870" }}
             >
-              {record.Bname}:{record.Caddress}
+              {record.Caddress}
             </a>
             <br />
           </span>
@@ -61,7 +92,7 @@ export default function Offer(props: {
       },
     },
     {
-      title: 'Solpass',
+      title: 'Status',
       dataIndex: "card",
       key: "card",
       render: (_, record) => {
@@ -76,7 +107,7 @@ export default function Offer(props: {
         return (
           <span>
             <a href={`${web3Config.opensea}${record.Caddress}/${record.tokenId}`} target="_blank">
-              Token #{record.tokenId}
+              {record.minted ? "Token #" + record.tokenId : "----"}
             </a>
             <br />
           </span>
@@ -90,10 +121,11 @@ export default function Offer(props: {
       render: (_, record) => {
         return (
           <div>
-
             <br />
             <span style={{ color: "#687182" }}>
-
+              {record.expirationDate
+                ? moment(record.expirationDate).format("YYYY-MM-DD")
+                : "Never Expires"}
             </span>
           </div>
         );
@@ -101,7 +133,6 @@ export default function Offer(props: {
     },
   ];
   async function getOffers(address?: string) {
-    const loading = message.loading("loading...", 0);
     const result = await fetch(
       "/api/offers?address=" + (address || "") + `&pageIndex=${page}`,
       {
@@ -118,12 +149,11 @@ export default function Offer(props: {
       setOffers(json.offers);
       setTotal(json.total);
     }
-    loading();
   }
   useEffect(() => {
+    const loading = message.loading("loading...", 5);
     (async () => {
       const walletInfo = await walletStore.getWalletInfo();
-      const loading = message.loading("loading...", 5);
       getOffers(walletInfo.account);
       console.log(walletInfo.account);
       loading;

@@ -39,9 +39,9 @@ export const MainBanner = (props: {}) => {
             </h1>
             <h2 className={styles.subInfo}>
               <p className={styles.subInfoMain}>
-                Based on ERC721-42
+                Based on ERC-5484 and ERC-721
                 <a
-                  href="https://github.com/"
+                  href="https://github.com/ethereum/EIPs/blob/9f019fffdb5a2075d1ed1cd29312db2a41cd1812/EIPS/eip-5484.md"
                   style={{ marginLeft: "10px" }}
                 >
                   (Github)

@@ -292,7 +292,7 @@ export const Status0 = (props: {}) => {
           placeholder='This pass is used for...'
           rows={5}
           value={solpassStore.info.Acomment}
-          maxLength={20}
+          maxLength={30}
           showCount={true}
           onChange={(e) => {
             solpassStore.info.Acomment = e.target.value;
