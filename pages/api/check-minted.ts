@@ -53,7 +53,6 @@ const handler: NextApiHandler = async (req, res) => {
             else if (req.body.action == 2) {
                 console.log("entered");
                 if (req.body.tokenId == undefined) {
-                    console.log("yepppppp");
                     return res.status(400).json({
                         message: "no tokenId",
                     });

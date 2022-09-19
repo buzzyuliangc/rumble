@@ -295,7 +295,7 @@ export class SolpassStore implements IStore {
                 }
                 const tokenId = await (await SolpassContract(contractAddr)).tokenOfOwnerByIndex(_addressB, tokenAmount.toNumber() - 1);
                 console.log("tokenid", tokenId);
-                this.pendingOffer.tokenId = tokenId.toString();
+                //this.pendingOffer.tokenId = tokenId.toString();
                 const body2 = {
                     id: _id,
                     action: 2,
