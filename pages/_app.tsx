@@ -33,28 +33,16 @@ export default function App({ Component, pageProps }) {
   const [showLang, setShowLang] = useState(false);
   useEffect(() => {
     if (!localStorage.getItem("locale")) {
-      // const hasZH = window.navigator.languages.findIndex((f) => {
-      //   return f.indexOf("zh") != -1;
-      // });
-      // if (hasZH > 0 && hasZH < 1) {
-      //   i18n.activate("cn");
-      // } else {
       i18n.activate("en");
-      // }
-      // setShowLang(true);
     } else {
-      localStorage.getItem("locale") == "cn"
-        ? i18n.activate("cn")
-        : i18n.activate("en");
+      i18n.activate("en");
     }
 
-    document.documentElement.style.fontSize = `${
-      (window.innerWidth * 100) / 1920
-    }px`;
-    window.addEventListener("resize", () => {
-      document.documentElement.style.fontSize = `${
-        (window.innerWidth * 100) / 1920
+    document.documentElement.style.fontSize = `${(window.innerWidth * 100) / 1920
       }px`;
+    window.addEventListener("resize", () => {
+      document.documentElement.style.fontSize = `${(window.innerWidth * 100) / 1920
+        }px`;
     });
 
     if (web3Config.network.chainId == 4) {
@@ -89,49 +77,8 @@ export default function App({ Component, pageProps }) {
         <Web3Head />
         <Component {...pageProps} />
         <div className="mobile-tip">
-          Use desktop version to get more friendly experience
+          Use desktop version to get a better experience
         </div>
-        {/* {showLang ? (
-          <div className="sc-AxgMl hkzEld web3modal-modal-lightbox">
-            <div className="sc-AxheI fdbjE web3modal-modal-container">
-              <div className="sc-Axmtr hvJMgY web3modal-modal-hitbox"></div>
-              <div className="sc-AxmLO bfIkEQ web3modal-modal-card">
-                <div className="sc-AxhUy kaSVED web3modal-provider-wrapper">
-                  <div className="sc-AxhCb xPSun web3modal-provider-container">
-                    <div
-                      className="sc-AxirZ hBmmHr web3modal-provider-name"
-                      style={{ opacity: 0.4 }}
-                    >
-                      Choose Your language
-                    </div>
-                    <div
-                      className="sc-AxirZ hBmmHr web3modal-provider-name"
-                      onClick={() => {
-                        i18n.activate("en");
-                        localStorage.setItem("locale", i18n.locale);
-                        setShowLang(false);
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      English
-                    </div>
-                    <div
-                      className="sc-AxirZ hBmmHr web3modal-provider-name"
-                      onClick={() => {
-                        i18n.activate("cn");
-                        localStorage.setItem("locale", i18n.locale);
-                        setShowLang(false);
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      中文
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null} */}
       </SafeHydrate>
     </I18nProvider>
   );

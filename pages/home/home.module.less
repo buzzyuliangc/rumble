@@ -60,7 +60,7 @@
 .Page1 {
   background: #eceffe;
   // backdrop-filter: blur(84px);
-  height: 873px;
+  //height: 873px;
   width: 100%;
   overflow: hidden;
 
@@ -220,6 +220,10 @@
   padding-bottom: 15px;
   padding-right: 10px;
 
+  @media @mobile {
+    padding-right: 0px;
+  }
+
   .Page_inner {
     display: flex;
     height: 100%;
@@ -230,11 +234,13 @@
     padding-right: 25px;
 
     @media @mobile {
+      padding-right: 0px;
+
       & {
         display: block;
 
         .left {
-          height: 500px;
+          width: 100%;
         }
 
         .right {
@@ -826,6 +832,11 @@
   width: 120%;
   margin-left: -10%;
   margin-top: 30px;
+
+  @media @mobile {
+    width: 100%;
+    margin-left: 0px;
+  }
 
   :global(.ant-steps-item) {
     width: 33%;

@@ -1,9 +1,11 @@
 @import "../../../styles/rem.less";
+
 .footer {
   text-align: center;
   height: 282px;
   background-color: #fff;
   border-top: 0.5px solid #ededed;
+
   .inner {
     width: 1200px;
     margin: 0 auto;
@@ -11,18 +13,25 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     @media @mobile {
       width: auto;
       margin: 0px 20px;
     }
   }
+
   .left {
     text-align: left;
     color: #725376;
     line-height: 30px;
   }
+
   .social {
     padding: 0 20px;
     color: #09244b;
+
+    @media @mobile {
+      padding: 0 10px;
+    }
   }
 }

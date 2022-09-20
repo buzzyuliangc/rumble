@@ -167,7 +167,7 @@ export default function Offer(props: {
           <Header hasBack={true} hideIndex={true} />
         </div>
         <div className={styles.container}>
-          <Form.Item className={styles.search}>
+          {/*<Form.Item className={styles.search}>
             <Input
               placeholder={t`请输入任意钱包地址`}
               defaultValue={props.offerId}
@@ -185,7 +185,7 @@ export default function Offer(props: {
                 getOffers(address);
               }}
             >{t`搜索`}</Button>
-          </Form.Item>
+            </Form.Item>*/}
           <Table
             columns={columns}
             dataSource={offers}

@@ -167,9 +167,9 @@ export default function Offer(props) {
                         className={styles.logo}
                       />
                     </div>
-                    Developed Based on ERC5484
+                    Developed Based on ERC-5484
                     <a
-                      href="https://github.com/"
+                      href="https://github.com/ethereum/EIPs/blob/9f019fffdb5a2075d1ed1cd29312db2a41cd1812/EIPS/eip-5484.md"
                       style={{ marginLeft: "10px" }}
                     >
                       Github

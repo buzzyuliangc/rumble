@@ -112,10 +112,9 @@ export const Collections = (props: {}) => {
 
     const data = Array.from({ length: total }).map((_, i) => ({
         id: i,
-        title: `ant design part ${i}`,
+        title: `Issued Solpass ${i}`,
         nftName: offers[i].nftName,
-        description:
-            offers[i].contractAddr,
+        description: offers[i].contractAddr.substr(0, 6) + "..." + offers[i].contractAddr.substr(offers[i].contractAddr.length - 4, 4),
         content:
             offers[i].Acomment,
         cover:
