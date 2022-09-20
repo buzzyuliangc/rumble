@@ -261,7 +261,7 @@ export const Status0 = (props: {}) => {
         >
           <Input
             value={solpassStore.info.Aname}
-            maxLength={5}
+            maxLength={30}
             placeholder="will get your .eth/.bit name auto"
             onChange={async (e) => {
               solpassStore.info.Aname = e.target.value;
@@ -281,7 +281,7 @@ export const Status0 = (props: {}) => {
           placeholder='Name your pass'
           value={solpassStore.info.nftName}
           style={{ width: "calc(100% - 120px)" }}
-          maxLength={9}
+          maxLength={30}
           onChange={(e) => {
             solpassStore.info.nftName = e.target.value;
           }}
@@ -292,7 +292,7 @@ export const Status0 = (props: {}) => {
           placeholder='This pass is used for...'
           rows={5}
           value={solpassStore.info.Acomment}
-          maxLength={30}
+          maxLength={50}
           showCount={true}
           onChange={(e) => {
             solpassStore.info.Acomment = e.target.value;
