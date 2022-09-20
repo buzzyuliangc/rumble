@@ -91,7 +91,6 @@ export const NFT = (props: {
       >
         <div>
           <h1
-            ref={ref}
             title="Spaceface"
             style={{
               fontSize,
@@ -104,7 +103,6 @@ export const NFT = (props: {
         </div>
 
         <div
-          ref={ref}
           style={{
             display: "inline-flex",
             alignItems: "center",
