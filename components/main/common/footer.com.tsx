@@ -12,7 +12,7 @@ export class Footer extends React.Component<any, any> {
           </div>
           <div className={styles.right}>
             <a
-              href="https://twitter.com/marryinweb3"
+              href="https://twitter.com/Rumble_dApp"
               className={styles.social}
               target={"_blank"}
             >
@@ -28,7 +28,7 @@ export class Footer extends React.Component<any, any> {
               </svg>
             </a>
             <a
-              href="https://github.com/marryinweb3"
+              href="https://github.com/ethereum/EIPs/blob/9f019fffdb5a2075d1ed1cd29312db2a41cd1812/EIPS/eip-5484.md"
               target={"_blank"}
               className={styles.social}
             >
@@ -49,7 +49,7 @@ export class Footer extends React.Component<any, any> {
               </svg>
             </a>
             <a
-              href="https://discord.gg/eAN9TaAaSq"
+              href="https://discord.gg/"
               target={"_blank"}
               className={styles.social}
             >

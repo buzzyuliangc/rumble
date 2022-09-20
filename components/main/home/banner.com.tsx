@@ -62,7 +62,7 @@ export const MainBanner = (props: {}) => {
               </p>
               <div className={styles.socials}>
                 <a
-                  href="https://twitter.com/"
+                  href="https://twitter.com/Rumble_dApp"
                   className={[styles.social, styles.twitter].join(" ")}
                   target={"_blank"}
                 >
@@ -73,17 +73,10 @@ export const MainBanner = (props: {}) => {
                   target={"_blank"}
                   className={[styles.social, styles.discord].join(" ")}
                 >
-                  Discord
+                  Discord (Coming Soon)
                 </a>
                 <a
-                  href="https://opensea.io/"
-                  target={"_blank"}
-                  className={[styles.social, styles.discord].join(" ")}
-                >
-                  OpenSea
-                </a>
-                <a
-                  href="https://github.com/"
+                  href="https://github.com/ethereum/EIPs/blob/9f019fffdb5a2075d1ed1cd29312db2a41cd1812/EIPS/eip-5484.md"
                   target={"_blank"}
                   className={[styles.social, styles.github].join(" ")}
                 >

@@ -97,10 +97,7 @@ export const Header = (props: {
           src="/i18n.png"
           title="i18n"
           className={styles.i18n}
-          onClick={() => {
-            i18n.locale == "cn" ? i18n.activate("en") : i18n.activate("cn");
-            localStorage.setItem("locale", i18n.locale);
-          }}
+          hidden={true}
         />
         {!props.hideIndex ? <WalletBar /> : null}
       </div>

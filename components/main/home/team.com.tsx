@@ -220,7 +220,7 @@ export const Team = (props: {}) => {
               <div className={styles.partner_item} style={{}}>
                 <a
                   className={styles.partner_item_link}
-                  href="https://twitter.com/marryinweb3"
+                  href="https://twitter.com/Rumble_dApp"
                   target={"_blank"}
                   style={{ color: "#f41870" }}
                 >
