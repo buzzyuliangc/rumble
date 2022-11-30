@@ -9,6 +9,12 @@ Based on ERC-721 and [ERC-5484](https://eips.ethereum.org/EIPS/eip-5484)
 
 1. Burn Authority is set before the mint on the consensus of both parties
 
+## Solpass
+
+Solpass is an implementation of ERC-5484, and the smart contract is deployed on Ethereum everytime an user create a new Solpass on Rumble.
+
+You can checkout Solpass Repo [here](https://github.com/buzzyuliangc/Solpass)
+
 ## Stack overview: 
 
 Smart Contracts: Solidity, ERC-721, ERC-5484
