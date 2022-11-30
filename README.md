@@ -1,15 +1,15 @@
-Rumble-app.io
+## Rumble-app.io
 
 Prove your social status with a permanent soulbound token stored on the chain.
 Based on ERC-721 and ERC-5484(Github)
 
--Create permanent soulbound tokens for your Bois. An non-transferable digital identity of your gang.
+1. Create permanent soulbound tokens for your Bois. An non-transferable digital identity of your gang.
 
--Powered by web3 Multisig technology, no party can fake your token or pretend that you are in their league.
+1. Powered by web3 Multisig technology, no party can fake your token or pretend that you are in their league.
 
--Burn Authority is set before the mint on the consensus of both parties
+1. Burn Authority is set before the mint on the consensus of both parties
 
-Stack overview: 
+## Stack overview: 
 
 Smart Contracts: Solidity, ERC-721, ERC-5484
 
