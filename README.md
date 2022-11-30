@@ -1,7 +1,7 @@
 ## Rumble-app.io
 
 Prove your social status with a permanent soulbound token stored on the chain.
-Based on ERC-721 and ERC-5484(Github)
+Based on ERC-721 and [ERC-5484](https://eips.ethereum.org/EIPS/eip-5484)
 
 1. Create permanent soulbound tokens for your Bois. An non-transferable digital identity of your gang.
 
